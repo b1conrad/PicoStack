@@ -6,16 +6,8 @@ ruleset boilerplate {
     shares boilerplate
   }
   global {
-    logout = function(_headers){
-      ctx:query(
-        wrangler:parent_eci(),
-        "byu.hr.oit",
-        "logout",
-        {"_headers":_headers}
-      )
-    }
     boilerplate = function(_headers){
-      url = logout(_headers).extract(re#location='([^']*)'#).head()
+      url = meta:host.extract(re#(.+):\d+#).head()
       html:header("manage boilerplates","",url,null,_headers)
       + <<
 <h1>Manage boilerplates</h1>
