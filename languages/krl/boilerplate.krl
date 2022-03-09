@@ -28,4 +28,9 @@ ruleset boilerplate {
       raise boilerplate event "factory_reset"
     }
   }
+  rule keepChannelsClean {
+    select when byu_hr_connect factory_reset
+    foreach wrangler:channels("boilerplates").reverse().tail() setting(chan)
+    wrangler:deleteChannel(chan.get("id"))
+  }
 }
