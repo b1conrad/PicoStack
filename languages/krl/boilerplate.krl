@@ -7,8 +7,7 @@ ruleset boilerplate {
   }
   global {
     boilerplate = function(_headers){
-      url = meta:host.extract(re#(.+):\d+#).head()
-      html:header("manage boilerplates","",url,null,_headers)
+      html:header("manage boilerplates","",null,null,_headers)
       + <<
 <h1>Manage boilerplates</h1>
 >>
