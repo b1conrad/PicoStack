@@ -4,7 +4,7 @@ ruleset first_jsp {
   }
   global {
     hello = function(){
-      num = random:number()
+      num = random:number(0,1)
       requestURI = meta:host + "/sky/cloud/" + meta:eci + "/" + meta:rid + "/hello.html"
       <<<html>
 <head><title>First JSP/KRL</title></head>
