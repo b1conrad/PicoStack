@@ -7,9 +7,9 @@ ruleset first_jsp2 {
       num = random:number(0,1)
       msg = num > 0.95 => "You'll have a lucky day!"
                         | "Well, life goes on ... "
-      <<
+      <<<!DOCTYPE html>
 <html>
-  <head>
+  <head lang="en">
     <title>First JSP/KRL</title>
   </head>
   <body>
