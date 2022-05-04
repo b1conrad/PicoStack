@@ -6,7 +6,8 @@ ruleset first_jsp {
     hello = function(){
       num = random:number(0,1)
       requestURI = meta:host + "/sky/cloud/" + meta:eci + "/" + meta:rid + "/hello.html"
-      <<<html>
+      <<<!doctype html>
+<html>
 <head><title>First JSP/KRL</title></head>
 <body>
 #{ (num > 0.95 => <<
