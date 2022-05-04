@@ -27,131 +27,131 @@ tr td+td {
 <body>
 <table cellpadding="0" cellspacing="0">
 <tr>
-<td></td>
+<td> 1</td>
 <td><span class="rhs">ruleset first_jsp {</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 2</td>
 <td><span class="rhs">  meta {</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 3</td>
 <td><span class="rhs">    shares hello</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 4</td>
 <td><span class="rhs">  }</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 5</td>
 <td><span class="rhs">  global {</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 6</td>
 <td><span class="rhs">    hello = function(){</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 7</td>
 <td><span class="rhs">      num = random:number(0,1)</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 8</td>
 <td><span class="rhs">      requestURI = "hello.html"</span></td>
 </tr>
 <tr>
-<td></td>
+<td> 9</td>
 <td><span class="rhs">      <<&lt;!doctype html></span></td>
 </tr>
 <tr>
-<td>&lt;html></td>
+<td>10 &lt;html></td>
 <td>&lt;html></td>
 </tr>
 <tr>
-<td>&lt;head>&lt;title>First JSP&lt;/title>&lt;/head></td>
+<td>11 &lt;head>&lt;title>First JSP&lt;/title>&lt;/head></td>
 <td>&lt;head>&lt;title>First JSP<span class="rhs">/KRL</span>&lt;/title>&lt;/head></td>
 </tr>
 <tr>
-<td>&lt;body></td>
+<td>12 &lt;body></td>
 <td>&lt;body></td>
 </tr>
 <tr>
-<td>  &lt;<span class="lhs">%</span></td>
+<td>13 <span class="lhs">  &lt;%</span></td>
 <td></td>
 </tr>
 <tr>
-<td><span class="lhs">    double num = Math.random();</span></td>
+<td>14 <span class="lhs">    double num = Math.random();</span></td>
 <td></td>
 </tr>
 <tr>
-<td><span class="lhs">    if</span> (num > 0.95) <span class="lhs">{</td>
+<td>15 <span class="lhs">    if</span> (num > 0.95) <span class="lhs">{</td>
 <td><span class="rhs">#{</span> (num > 0.95) <span class="rhs">=> &lt;&lt;</span></td>
 </tr>
 <tr>
-<td><span class="lhs">  %></span></td>
+<td>16 <span class="lhs">  %></span></td>
 <td></td>
 </tr>
 <tr>
-<td>      &lt;h2>You'll have a lucky day!&lt;/h2>&lt;p>(<span class="lhs">&lt;%= </span>num<span class="lhs"> %></span>)&lt;/p></td>
+<td>17       &lt;h2>You'll have a lucky day!&lt;/h2>&lt;p>(<span class="lhs">&lt;%= </span>num<span class="lhs"> %></span>)&lt;/p></td>
 <td>      &lt;h2>You'll have a lucky day!&lt;/h2>&lt;p>(<span class="rhs">#{</span>num<span class="rhs">}</span>)&lt;/p></td>
 </tr>
 <tr>
-<td><span class="lhs">  &lt;%</span></td>
+<td>18 <span class="lhs">  &lt;%</span></td>
 <td></td>
 </tr>
 <tr>
-<td><span class="lhs">    } else {</span></td>
+<td>19 <span class="lhs">    } else {</span></td>
 <td><span class="rhs">>> | &lt;&lt;</span></td>
 </tr>
 <tr>
-<td><span class="lhs">  %></span></td>
+<td>20 <span class="lhs">  %></span></td>
 <td></td>
 </tr>
 <tr>
-<td><span class="lhs">  %></span></td>
+<td>21 <span class="lhs">  %></span></td>
 <td></td>
 </tr>
 <tr>
-<td>      &lt;h2>Well, life goes on ... &lt;/h2>&lt;p>(<span class="lhs">&lt;%= </span>num<span class="lhs"> %></span>)&lt;/p></td>
+<td>22       &lt;h2>Well, life goes on ... &lt;/h2>&lt;p>(<span class="lhs">&lt;%= </span>num<span class="lhs"> %></span>)&lt;/p></td>
 <td>      &lt;h2>Well, life goes on ... &lt;/h2>&lt;p>(<span class="rhs">#{</span>num<span class="rhs">}</span>)&lt;/p></td>
 </tr>
 <tr>
-<td><span class="lhs">  &lt;%</span></td>
+<td>23 <span class="lhs">  &lt;%</span></td>
 <td></td>
 </tr>
 <tr>
-<td><span class="lhs">    }</span></td>
+<td>24 <span class="lhs">    }</span></td>
 <td><span class="rhs">>>}</span></td>
 </tr>
 <tr>
-<td><span class="lhs">  %></span></td>
+<td>25 <span class="lhs">  %></span></td>
 <td></td>
 </tr>
 <tr>
-<td>  &lt;a href="<span class="lhs">&lt;= request.getR</span>equestURI<span class="lhs">() %></span>">&lt;h3>Try Again&lt;/h3>&lt;/a></td>
+<td>26   &lt;a href="<span class="lhs">&lt;= request.getR</span>equestURI<span class="lhs">() %></span>">&lt;h3>Try Again&lt;/h3>&lt;/a></td>
 <td>  &lt;a href="<span class="rhs">#{r</span>equestURI<span class="rhs">}</span>">&lt;h3>Try Again&lt;/h3>&lt;/a></td>
 </tr>
 <tr>
-<td>&lt;/body></td>
+<td>27 &lt;/body></td>
 <td>&lt;/body></td>
 </tr>
 <tr>
-<td>&lt;/html></td>
+<td>28 &lt;/html></td>
 <td>&lt;/html></td>
 </tr>
 <tr>
-<td></td>
+<td>29</td>
 <td><span class="rhs">>></span></td>
 </tr>
 <tr>
-<td></td>
+<td>30</td>
 <td><span class="rhs">    }</span></td>
 </tr>
 <tr>
-<td></td>
+<td>31</td>
 <td><span class="rhs">  }</span></td>
 </tr>
 <tr>
-<td></td>
+<td>32</td>
 <td><span class="rhs">}</span></td>
 </tr>
 </table>
