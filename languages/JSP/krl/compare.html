@@ -1,8 +1,12 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <title>Compare JSP/KRL</title>
-<style type="text/css">
+<style>
+table {
+  border-spacing: 0;
+  padding: 0;
+}
 td {
   font-family: monospace;
   white-space: pre;
@@ -25,7 +29,7 @@ tr td+td {
 </style>
 </head>
 <body>
-<table cellpadding="0" cellspacing="0">
+<table>
 <tr>
 <td> 1</td>
 <td><span class="rhs">ruleset first_jsp {</span></td>
@@ -60,7 +64,7 @@ tr td+td {
 </tr>
 <tr>
 <td> 9</td>
-<td><span class="rhs">      <<&lt;!doctype html></span></td>
+<td><span class="rhs">      &lt;&lt;&lt;!doctype html></span></td>
 </tr>
 <tr>
 <td>10 &lt;html></td>
@@ -83,7 +87,7 @@ tr td+td {
 <td></td>
 </tr>
 <tr>
-<td>15 <span class="lhs">    if</span> (num > 0.95) <span class="lhs">{</td>
+<td>15 <span class="lhs">    if</span> (num > 0.95) <span class="lhs">{</span></td>
 <td><span class="rhs">#{</span> (num > 0.95) <span class="rhs">=> &lt;&lt;</span></td>
 </tr>
 <tr>
