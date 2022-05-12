@@ -31,7 +31,7 @@ ruleset css2colors {
         <<#{left_margin}<option value="#{v}"#{k==default => " selected" | ""}>#{k}</option>
 >>
       }
-      colormap.map(gen_option).values().join("")
+      colors.map(gen_option).values().join("")
     }
   }
 }
