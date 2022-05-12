@@ -65,7 +65,7 @@ Favorite color: <select name="fav_color">
     select when fav_color fav_color_selected
       fav_color re#^(\#[a-f0-9]{6})$# setting(fav_color)
     pre {
-      colorname = colormap.filter(function(v){v==fav_color}).keys().head()
+      colorname = colors:colormap.filter(function(v){v==fav_color}).keys().head()
     }
     fired {
       ent:colorname := colorname
