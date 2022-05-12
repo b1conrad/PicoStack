@@ -1,4 +1,4 @@
-ruleset css2colors {
+ruleset fav-color-sample {
   meta {
     name "fav-color"
     description <<
@@ -6,6 +6,7 @@ ruleset css2colors {
     >>
     use module io.picolabs.wrangler alias wrangler
     use module html
+    use module css2colors alias colors
     shares index
   }
   global {
@@ -69,8 +70,7 @@ Favorite color: <select name="fav_color">
       "orange": "#ffa500",
     }
     channel_tags = [
-      "css2colors",
-      "fav-color",
+      "fav-color-sample",
     ]
   }
   rule initialize {
