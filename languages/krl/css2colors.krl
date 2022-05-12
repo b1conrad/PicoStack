@@ -6,15 +6,14 @@ ruleset css2colors {
     >>
     use module io.picolabs.wrangler alias wrangler
     use module html
-    // use module css3colors alias colors
     shares index
   }
   global {
     index = function(_headers){
       url = <<#{meta:host}/sky/event/#{meta:eci}/selectcolor/fav_color/fav_color_selected>>
-      html:header("Manage Favorite Color","",null,null,_headers)
+      html:header("Favorite Color","",null,null,_headers)
       + <<
-<h1>Manage Favorite Color</h1>
+<h1>Favorite Color</h1>
 #{ent:colorname => <<<p>Your favorite color:</p>
 <table style="background-color:white">
   <thead>
