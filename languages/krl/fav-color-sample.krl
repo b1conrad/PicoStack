@@ -1,9 +1,6 @@
 ruleset fav-color-sample {
   meta {
     name "fav-color"
-    description <<
-      scraped from https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color_keywords May 11, 2022
-    >>
     use module io.picolabs.wrangler alias wrangler
     use module html
     use module css2colors alias colors
