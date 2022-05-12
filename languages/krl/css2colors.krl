@@ -1,12 +1,9 @@
 ruleset css2colors {
   meta {
-    description <<
-      scraped from https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color_keywords May 11, 2022
-    >>
     provides colormap, options
   }
   global {
-    colormap = {
+    colors = { // scraped from https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color_keywords May 11, 2022
       "black": "#000000",
       "silver": "#c0c0c0",
       "gray": "#808080",
@@ -24,6 +21,9 @@ ruleset css2colors {
       "teal": "#008080",
       "aqua": "#00ffff",
       "orange": "#ffa500",
+    }
+    colormap = function(){
+      colors
     }
     options = function(indent,default){
       left_margin = indent || ""
