@@ -7,9 +7,9 @@ ruleset fav-color-sample {
     shares index
   }
   global {
-    index = function(_headers){
+    index = function(){
       url = <<#{meta:host}/sky/event/#{meta:eci}/selectcolor/fav_color/fav_color_selected>>
-      html:header("Favorite Color","",null,null,_headers)
+      html:header("Favorite Color","")
       + <<
 <h1>Favorite Color</h1>
 #{ent:colorname => <<<p>Your favorite color:</p>
