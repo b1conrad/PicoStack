@@ -2,14 +2,14 @@ ruleset boilerplate {
   meta {
     name "boilerplates"
     use module io.picolabs.wrangler alias wrangler
-    use module html.byu alias html
+    use module html
     shares boilerplate
   }
   global {
-    boilerplate = function(_headers){
-      html:header("manage boilerplates","",null,null,_headers)
+    boilerplate = function(){
+      html:header("manage boilerplates","")
       + <<
-<h1>Manage boilerplates</h1>
+<h1>Boilerplate</h1>
 >>
       + html:footer()
     }
