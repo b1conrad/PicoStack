@@ -74,6 +74,10 @@ Favorite color: <select name="fav_color">
     fired {
       ent:colorname := colorname
       ent:colorcode := fav_color
+      raise fav_color event "fav_color_recorded" attributes {
+        "colorcode":fav_color,
+        "colorname":colorname,
+      }
     }
   }
   rule redirectBack {
