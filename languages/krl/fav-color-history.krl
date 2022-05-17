@@ -12,7 +12,7 @@ ruleset fav-color-history {
       MST > "2022-03-13T02" => MDT |
                                MST
     }
-    ts_format(ts){
+    ts_format = function(ts){
       parts = ts.split(re#[T.]#)
       parts.filter(function(v,i){i<2}).join(" ")
     }
