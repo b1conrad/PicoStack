@@ -73,11 +73,11 @@ ruleset fav-color-history {
   }
   rule recordFavColor {
     select when fav_color fav_color_recorded
-    pre {
-      timestamp = time:now()
-    }
+      colorname re#(.+)#
+      colorcode re#(.+)#
+      setting(colorname,colorcode)
     fired {
-      ent:history{timestamp} := {
+      ent:history{time:now()} := {
         "colorname": colorname,
         "colorcode": colorcode,
       }
