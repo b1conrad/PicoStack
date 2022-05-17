@@ -25,7 +25,7 @@ ruleset fav-color-sample {
     <tr>
       <td style="text-align:center"><code>#{ent:colorname}</code></td>
       <td><code>#{ent:colorcode}</code></td>
-      <td style="background-color:#{ent:colorname}"></td>
+      <td style="background-color:#{ent:colorcode}"></td>
     </tr>
   </tbody>
 </table>
