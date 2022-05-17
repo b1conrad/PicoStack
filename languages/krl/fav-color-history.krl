@@ -24,7 +24,7 @@ ruleset fav-color-history {
       <td>#{k.makeMT().ts_format()}</td>
       <td style="text-align:center"><code>#{the_name}</code></td>
       <td><code>#{the_code}</code></td>
-      <td#{the_code => << style="background-color:#{the_name}">> | ""}></td>
+      <td#{the_code => << style="background-color:#{the_code}">> | ""}></td>
     </tr>
 >>
       }
