@@ -5,12 +5,23 @@ ruleset fav-color-history {
     shares index
   }
   global {
+    makeMT = function(ts){
+      MST = time:add(ts,{"hours": -7});
+      MDT = time:add(ts,{"hours": -6});
+      MDT > "2022-11-06T02" => MST |
+      MST > "2022-03-13T02" => MDT |
+                               MST
+    }
+    ts_format(ts){
+      parts = ts.split(re#[T.]#)
+      parts.filter(function(v,i){i<2}).join(" ")
+    }
     history_rows = function(){
       history_one_row = function(v,k){
         the_name = v{"colorname"}
         the_code = v{"colorcode"}
         <<    <tr>
-      <td>#{k}</td>
+      <td>#{k.makeMT().ts_format()}</td>
       <td style="text-align:center"><code>#{the_name}</code></td>
       <td><code>#{the_code}</code></td>
       <td#{the_code => << style="background-color:#{the_name}">> | ""}></td>
