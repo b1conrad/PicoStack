@@ -5,6 +5,20 @@ ruleset fav-color-history {
     shares index
   }
   global {
+    history_rows = function(){
+      history_one_row = function(v,k){
+        the_name = v{"colorname"}
+        the_code = v{"colorcode"}
+        <<    <tr>
+      <td>#{k}</td>
+      <td style="text-align:center"><code>#{the_name}</code></td>
+      <td><code>#{the_code}</code></td>
+      <td#{the_code => << style="background-color:#{the_name}">> | ""}></td>
+    </tr>
+>>
+      }
+      ent:history.map(history_one_row).values().join("")
+    }
     index = function(){
       html:header("Favorite Color History","")
       + <<
@@ -20,13 +34,7 @@ ruleset fav-color-history {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>#{time:now()}</td>
-      <td style="text-align:center"><code>#{ent:colorname}</code></td>
-      <td><code>#{ent:colorcode}</code></td>
-      <td style="background-color:#{ent:colorname}"></td>
-    </tr>
-  </tbody>
+#{history_rows()}</tbody>
 </table>
 >>
       + html:footer()
@@ -45,34 +53,34 @@ ruleset fav-color-history {
       )
     }
     fired {
-      raise fav_color event "factory_reset"
+      ent:history := {}
+      raise fav_color_history event "factory_reset"
     }
   }
   rule keepChannelsClean {
-    select when fav_color factory_reset
+    select when fav_color_history factory_reset
     foreach wrangler:channels(channel_tags).reverse().tail() setting(chan)
     wrangler:deleteChannel(chan.get("id"))
   }
-  rule recordFavColor {
-    select when fav_color fav_color_selected
-      fav_color re#^(\#[a-f0-9]{6})$# setting(fav_color)
-    pre {
-      colorname = colors:colormap()
-        .filter(function(v){v==fav_color})
-        .keys()
-        .head()
-      || "unknown"
-    }
+  rule recordInstallation {
+    select when fav_color factory_reset
     fired {
-      ent:colorname := colorname
-      ent:colorcode := fav_color
+      ent:history{time:now()} := {
+        "colorname": "none",
+        "colorcode": null,
+      }
     }
   }
-  rule redirectBack {
-    select when fav_color fav_color_selected
+  rule recordFavColor {
+    select when fav_color fav_color_recorded
     pre {
-      referrer = event:attr("_headers").get("referer") // sic
+      timestamp = time:now()
     }
-    if referrer then send_directive("_redirect",{"url":referrer})
+    fired {
+      ent:history{timestamp} := {
+        "colorname": colorname,
+        "colorcode": colorcode,
+      }
+    }
   }
 }
