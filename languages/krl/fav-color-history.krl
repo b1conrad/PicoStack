@@ -20,8 +20,9 @@ ruleset fav-color-history {
       history_one_row = function(v,k){
         the_name = v{"colorname"} || "none"
         the_code = v{"colorcode"}
+        millis = k.extract(re#[.]([0-9]{3})Z#).head()
         <<    <tr>
-      <td>#{k.makeMT().ts_format()}</td>
+      <td title="#{millis}">#{k.makeMT().ts_format()}</td>
       <td style="text-align:center"><code>#{the_name}</code></td>
       <td><code>#{the_code}</code></td>
       <td#{the_code => << style="background-color:#{the_code}">> | ""}></td>
