@@ -76,22 +76,13 @@ ruleset fav-color-history {
   rule recordInstallation {
     select when fav_color factory_reset
     fired {
-      ent:history{time:now()} := {
-        "colorname": "none",
-        "colorcode": null,
-      }
+      ent:history{time:now()} := {}
     }
   }
   rule recordFavColor {
     select when fav_color fav_color_recorded
-      colorname re#(.+)#
-      colorcode re#(.+)#
-      setting(colorname,colorcode)
     fired {
-      ent:history{time:now()} := {
-        "colorname": colorname,
-        "colorcode": colorcode,
-      }
+      ent:history{time:now()} := event:attrs
     }
   }
 }
