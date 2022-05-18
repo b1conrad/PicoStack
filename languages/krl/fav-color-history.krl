@@ -18,7 +18,7 @@ ruleset fav-color-history {
     }
     history_rows = function(){
       history_one_row = function(v,k){
-        the_name = v{"colorname"}
+        the_name = v{"colorname"} || "none"
         the_code = v{"colorcode"}
         <<    <tr>
       <td>#{k.makeMT().ts_format()}</td>
