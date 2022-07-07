@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Compare JSP/KRL</title>
+<style>
+table {
+  border-spacing: 0;
+  padding: 0;
+}
+td {
+  font-family: monospace;
+  white-space: pre;
+}
+span.rhs {
+  background-color: #D6E9FF;
+}
+span.lhs {
+  background-color: #FEE3E3;
+  text-decoration: line-through;
+}
+tr td {
+  margin: 0 5px;
+  border-right: 1px solid black;
+  padding: 0 5px;
+}
+tr td+td {
+  border: none;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td> 1</td>
+<td><span class="rhs">ruleset first_jsp {</span></td>
+</tr>
+<tr>
+<td> 2</td>
+<td><span class="rhs">  meta {</span></td>
+</tr>
+<tr>
+<td> 3</td>
+<td><span class="rhs">    shares hello</span></td>
+</tr>
+<tr>
+<td> 4</td>
+<td><span class="rhs">  }</span></td>
+</tr>
+<tr>
+<td> 5</td>
+<td><span class="rhs">  global {</span></td>
+</tr>
+<tr>
+<td> 6</td>
+<td><span class="rhs">    hello = function(){</span></td>
+</tr>
+<tr>
+<td> 7</td>
+<td><span class="rhs">      num = random:number(0,1)</span></td>
+</tr>
+<tr>
+<td> 8</td>
+<td><span class="rhs">      requestURI = "hello.html"</span></td>
+</tr>
+<tr>
+<td> 9</td>
+<td><span class="rhs">      &lt;&lt;&lt;!doctype html></span></td>
+</tr>
+<tr>
+<td>10 &lt;html></td>
+<td>&lt;html></td>
+</tr>
+<tr>
+<td>11 &lt;head>&lt;title>First JSP&lt;/title>&lt;/head></td>
+<td>&lt;head>&lt;title>First JSP<span class="rhs">/KRL</span>&lt;/title>&lt;/head></td>
+</tr>
+<tr>
+<td>12 &lt;body></td>
+<td>&lt;body></td>
+</tr>
+<tr>
+<td>13 <span class="lhs">  &lt;%</span></td>
+<td></td>
+</tr>
+<tr>
+<td>14 <span class="lhs">    double num = Math.random();</span></td>
+<td></td>
+</tr>
+<tr>
+<td>15 <span class="lhs">    if</span> (num > 0.95) <span class="lhs">{</span></td>
+<td><span class="rhs">#{</span> (num > 0.95) <span class="rhs">=> &lt;&lt;</span></td>
+</tr>
+<tr>
+<td>16 <span class="lhs">  %></span></td>
+<td></td>
+</tr>
+<tr>
+<td>17       &lt;h2>You'll have a lucky day!&lt;/h2>&lt;p>(<span class="lhs">&lt;%= </span>num<span class="lhs"> %></span>)&lt;/p></td>
+<td>      &lt;h2>You'll have a lucky day!&lt;/h2>&lt;p>(<span class="rhs">#{</span>num<span class="rhs">}</span>)&lt;/p></td>
+</tr>
+<tr>
+<td>18 <span class="lhs">  &lt;%</span></td>
+<td></td>
+</tr>
+<tr>
+<td>19 <span class="lhs">    } else {</span></td>
+<td><span class="rhs">>> | &lt;&lt;</span></td>
+</tr>
+<tr>
+<td>20 <span class="lhs">  %></span></td>
+<td></td>
+</tr>
+<tr>
+<td>21 <span class="lhs">  %></span></td>
+<td></td>
+</tr>
+<tr>
+<td>22       &lt;h2>Well, life goes on ... &lt;/h2>&lt;p>(<span class="lhs">&lt;%= </span>num<span class="lhs"> %></span>)&lt;/p></td>
+<td>      &lt;h2>Well, life goes on ... &lt;/h2>&lt;p>(<span class="rhs">#{</span>num<span class="rhs">}</span>)&lt;/p></td>
+</tr>
+<tr>
+<td>23 <span class="lhs">  &lt;%</span></td>
+<td></td>
+</tr>
+<tr>
+<td>24 <span class="lhs">    }</span></td>
+<td><span class="rhs">>>}</span></td>
+</tr>
+<tr>
+<td>25 <span class="lhs">  %></span></td>
+<td></td>
+</tr>
+<tr>
+<td>26   &lt;a href="<span class="lhs">&lt;= request.getR</span>equestURI<span class="lhs">() %></span>">&lt;h3>Try Again&lt;/h3>&lt;/a></td>
+<td>  &lt;a href="<span class="rhs">#{r</span>equestURI<span class="rhs">}</span>">&lt;h3>Try Again&lt;/h3>&lt;/a></td>
+</tr>
+<tr>
+<td>27 &lt;/body></td>
+<td>&lt;/body></td>
+</tr>
+<tr>
+<td>28 &lt;/html></td>
+<td>&lt;/html></td>
+</tr>
+<tr>
+<td>29</td>
+<td><span class="rhs">>></span></td>
+</tr>
+<tr>
+<td>30</td>
+<td><span class="rhs">    }</span></td>
+</tr>
+<tr>
+<td>31</td>
+<td><span class="rhs">  }</span></td>
+</tr>
+<tr>
+<td>32</td>
+<td><span class="rhs">}</span></td>
+</tr>
+</table>
+</body>
+</html>
