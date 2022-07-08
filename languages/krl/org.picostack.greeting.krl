@@ -47,12 +47,12 @@ I would like to be called <input name="name">.<br>
       name re#(.+)# setting(new_name)
     fired {
       ent:name := new_name
-      raise org_picostack_greeting event "name_preference_changed"
+      raise org_picostack_greeting event "name_preference_stored"
         attributes event:attrs
     }
   }
   rule redirectBack {
-    select when org_picostack_greeting name_preference_changed
+    select when org_picostack_greeting name_preference_stored
     pre {
       referer = event:attr("_headers").get("referer")
     }
