@@ -12,7 +12,6 @@ ruleset org.picostack.greeting {
       html:header("manage greetings","",null,null,_headers)
       + <<
 <h1>Manage greetings</h1>
-<p>Hello, #{ent:name.defaultsTo("world")}!</p>
 >>
       + (ent:name.isnull() => <<
 <p>How would you like to be greeted?</p>
@@ -20,7 +19,9 @@ ruleset org.picostack.greeting {
 I would like to be called <input name="name">.<br>
 <button type="submit">Submit</button>
 </form>
->> | "")
+>> | <<
+<p>Hello, #{ent:name}!</p>
+>>)
       + html:footer()
     }
   }
