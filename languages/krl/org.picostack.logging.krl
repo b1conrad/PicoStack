@@ -10,23 +10,30 @@ ruleset org.picostack.logging {
     log = function(_headers){
       uiECI = wrangler:channels(["engine","ui"]).head().get("id")
       url = <<#{meta:host}/sky/cloud/#{uiECI}/io.picolabs.pico-engine-ui/logs>>
-      script = <<<script type="text/javascript">
+      html:header("manage logs","",null,null,_headers)
+      + <<
+<h1>Manage logs</h1>
+<ul id="logsul"></ul>
+>>
+      + <<<script type="text/javascript">
+  var the_ul = document.getElementById('logsul');
   var url = "#{url}";
   var xhr = new XMLHttpRequest();
   xhr.open('GET',url);
   xhr.responseType = 'json';
   xhr.onload = function(){
+    var logs_array = this.response;
     console.log('response',this.response);
+    for(var i=0; i<logs_array.length; ++i){
+      var episode = logs_array[i];
+      var the_li = document.createElement('li');
+      the_li.appendChild(document.createTextNode(episode.time+' - '+episode.header));
+      the_ul.appendChild(the_li);
+    }
   }
   xhr.send();
 </script>
 >>
-      html:header("manage logs","",null,null,_headers)
-      + <<
-<h1>Manage logs</h1>
-<pre id="logspre"></pre>
->>
-      + script
       + html:footer()
     }
   }
