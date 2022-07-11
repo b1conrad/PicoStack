@@ -11,12 +11,13 @@ ruleset org.picostack.logging {
       uiECI = wrangler:channels(["engine","ui"]).head().get("id")
       url = <<#{meta:host}/sky/cloud/#{uiECI}/io.picolabs.pico-engine-ui/logs>>
       script = <<<script type="text/javascript">
+  var url = "#{url}";
   var xhr = new XMLHttpRequest();
   xhr.onload = function(){
     var data = xhr.response;
     console.log(JSON.stringify(data));
   }
-  xhr.open("GET",#{url});
+  xhr.open("GET",url);
   xhr.send();
 </script>
 >>
