@@ -17,13 +17,14 @@ ul#logging-list {
 ul#logging-list li {
   white-space: pre;
   font-family: monospace;
-  display: inline-block;
+  display: block;
 }
 .logging-detail {
   margin-left: 18px;
   display: none;
 }
 ul#logging-list label {
+  display: inline-block;
   cursor: pointer;
 }
 ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
@@ -42,11 +43,15 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 >>
     }
     log = function(_headers){
+      since = ent:episodes.head().get("time") || ""
+      episodes = logs()
+        .filter(function(e){e{"time"} > since})
+        .append(ent:episodes)
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logs</h1>
 <ul id="logging-list">
-#{ent:episodes.map(log_li).join("")}</ul>
+#{episodes.map(log_li).join("")}</ul>
 >>
       + html:footer()
     }
