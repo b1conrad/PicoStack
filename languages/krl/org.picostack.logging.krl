@@ -20,7 +20,7 @@ ul#logging-list li {
   display: block;
 }
 .logging-detail {
-  margin-left: 18px;
+  margin: 0 0 0 18px;
   display: none;
 }
 ul#logging-list label {
@@ -35,8 +35,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
     log_li = function(episode,index){
       key = episode{"time"} + " - " + episode{"header"}
       <<<li>
-  <input type="checkbox" id="episode-#{index}">
-  <label for="episode-#{index}">#{key}</label>
+  <input type="checkbox" id="episode-#{index}"> <label for="episode-#{index}">#{key}</label>
   <pre class="logging-detail">#{episode{"entries"}.join(chr(10))}
 </pre>
 </li>
