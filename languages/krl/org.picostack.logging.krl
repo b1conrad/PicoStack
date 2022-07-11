@@ -16,7 +16,7 @@ ruleset org.picostack.logging {
     var data = xhr.response;
     console.log(JSON.stringify(data));
   }
-  xhr.open("GET",url);
+  xhr.open("GET",#{url});
   xhr.send();
 </script>
 >>
