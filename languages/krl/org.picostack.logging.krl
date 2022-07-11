@@ -7,10 +7,18 @@ ruleset org.picostack.logging {
   }
   global {
     event_domain = "org_picostack_logging"
+    styles = <<<style type="text/css">
+ul#logsul li {
+  white-space: pre;
+  font-family: monospace;
+  display: block;
+}
+</style>
+>>
     log = function(_headers){
       uiECI = wrangler:channels(["engine","ui"]).head().get("id")
       url = <<#{meta:host}/sky/cloud/#{uiECI}/io.picolabs.pico-engine-ui/logs>>
-      html:header("manage logs","",null,null,_headers)
+      html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logs</h1>
 <ul id="logsul"></ul>
