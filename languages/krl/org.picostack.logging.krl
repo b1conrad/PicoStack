@@ -13,11 +13,11 @@ ruleset org.picostack.logging {
       script = <<<script type="text/javascript">
   var url = "#{url}";
   var xhr = new XMLHttpRequest();
+  xhr.open('GET',url);
+  xhr.responseType = 'json';
   xhr.onload = function(){
-    var data = xhr.response;
-    console.log(JSON.stringify(data));
+    console.log('response',this.response);
   }
-  xhr.open("GET",url);
   xhr.send();
 </script>
 >>
