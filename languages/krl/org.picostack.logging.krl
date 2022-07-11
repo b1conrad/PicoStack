@@ -17,7 +17,7 @@ ul#logging-list {
 ul#logging-list li {
   white-space: pre;
   font-family: monospace;
-  display: block;
+  display: inline-block;
 }
 .logging-detail {
   margin-left: 18px;
@@ -42,8 +42,6 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 >>
     }
     log = function(_headers){
-      uiECI = wrangler:channels(["engine","ui"]).head().get("id")
-      url = <<#{meta:host}/sky/cloud/#{uiECI}/io.picolabs.pico-engine-ui/logs>>
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logs</h1>
