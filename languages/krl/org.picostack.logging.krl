@@ -8,6 +8,12 @@ ruleset org.picostack.logging {
   global {
     event_domain = "org_picostack_logging"
     styles = <<<style type="text/css">
+ul#logsul {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+  width: auto;
+}
 ul#logsul li {
   white-space: pre;
   font-family: monospace;
