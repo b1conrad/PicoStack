@@ -27,6 +27,9 @@ ul#logging-list label {
   display: inline-block;
   cursor: pointer;
 }
+[type="checkbox] {
+  vertical-align: middle;
+}
 ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
   display: block;
 }
