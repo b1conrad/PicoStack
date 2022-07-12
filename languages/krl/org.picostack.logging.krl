@@ -3,10 +3,13 @@ ruleset org.picostack.logging {
     name "logs"
     use module io.picolabs.wrangler alias wrangler
     use module html.byu alias html
-    shares log
+    shares log, settings
   }
   global {
     event_domain = "org_picostack_logging"
+/*
+* Page: log.html
+*/
     styles = <<<style type="text/css">
 ul#logging-list {
   padding: 0px;
@@ -44,12 +47,26 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 //        .append(ent:episodes)
       html:header("manage logs",styles,null,null,_headers)
       + <<
+<h1 style="float:right" title="Settings" onclick="location='settings.html'">⚙</h1>
 <h1>Manage logs</h1>
 <ul id="logging-list">
 #{episodes.map(log_li).join("")}</ul>
 >>
       + html:footer()
     }
+/*
+* Page: settings.html
+*/
+    settings = function(_headers){
+      html:header("manage logs",styles,null,null,_headers)
+      + <<
+<h1>Manage logging settings</h1>
+>>
+      + html:footer()
+    }
+/*
+* Internal: logs function
+*/
     logs = function(){
       omit_common = function(g){
         hdr = g.get("header")
@@ -121,6 +138,9 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
         .reverse()
     }
   }
+/*
+* Rules
+*/
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
     every {
