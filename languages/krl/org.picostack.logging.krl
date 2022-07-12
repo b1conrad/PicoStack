@@ -41,10 +41,9 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 >>
     }
     log = function(_headers){
-//      since = ent:episodes.head().get("time") || ""
-      episodes = logs().slice(0,ent:count-1)
-//        .filter(function(e){e{"time"} > since})
-//        .append(ent:episodes)
+      the_logs = logs()
+      episodes = the_logs.length() <= ent:count
+        => the_logs | the_logs.slice(0,ent:count-1)
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1
@@ -67,7 +66,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 <h2>Omit queries matching:</h2>
 <pre><code>#{ent:omitQuery.map(oqs).values().join(chr(10))}</code></pre>
 <h2>Display how many episodes</h2>
-<p>#{ent:count}</p>
+<pre><code>#{ent:count}</pre><code>
 >>
       + html:footer()
     }
@@ -176,7 +175,6 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
   rule initSettings {
     select when org_picostack_logging factory_reset
     fired {
-//      ent:episodes := logs()
       ent:omitQuery := {
         "io.picolabs.pico-engine-ui": "",
         "io.picolabs.subscription": "established",
