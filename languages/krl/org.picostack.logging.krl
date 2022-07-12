@@ -53,9 +53,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
     logs = function(){
       omit_common = function(g){
         hdr = g.get("header")
-        hdr.match(re#^QUERY .*io.picolabs.pico-engine-ui/#) => false |
-        hdr.match(re#^QUERY .*io.picolabs.subscription/established#) => false |
-        true
+        ent:omitQuery.none(function(regExp){hdr.match(regExp)})
       }
       logOther = function(entry){
         entry.delete("time")
@@ -141,10 +139,14 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
     foreach wrangler:channels(["logs"]).reverse().tail() setting(chan)
     wrangler:deleteChannel(chan.get("id"))
   }
-  rule cacheEpisodes {
+  rule initSettings {
     select when org_picostack_logging factory_reset
     fired {
 //      ent:episodes := logs()
+      ent:omitQuery := [
+        re#^QUERY .*io.picolabs.pico-engine-ui/#,
+        re#^QUERY .*io.picolabs.subscription/established#,
+      ]
     }
   }
 }
