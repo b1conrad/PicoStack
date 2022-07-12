@@ -61,28 +61,25 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 * Page: settings.html
 */
     settings = function(_headers){
-      oqs = function(re){
-        re.as("String")
-      }
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logging settings</h1>
-<pre><code>#{
-  ent:omitQuery
-    .map(oqs)
-    .values()
-    .join(chr(10))
-}</code></pre>
+<pre><code>#{ent:omitQuery.map(oqs).values().join(chr(10))}</code></pre>
 >>
       + html:footer()
     }
 /*
 * Internal: logs function
 */
+    oqs = function(v,k){
+      k + (v => "/" + v | "")
+    }
     logs = function(){
-      omit_common = function(g){
-        hdr = g.get("header")
-        ent:omitQuery.none(function(regExp){hdr.match(regExp)})
+      keep_all_but_common_queries = function(g){
+        hdrs = g.get("header") // QUERY ECI RID/NAME ARGS
+          .split(" ")
+        hdrs.head() != "QUERY"
+        || ent:omitQuery.map(oqs).values().none(function(s){s == hdrs[2]})
       }
       logOther = function(entry){
         entry.delete("time")
@@ -146,7 +143,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
             "entries": entries,
           }
         })
-        .filter(omit_common)
+        .filter(keep_all_but_common_queries)
         .reverse()
     }
   }
@@ -175,10 +172,10 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
     select when org_picostack_logging factory_reset
     fired {
 //      ent:episodes := logs()
-      ent:omitQuery := [
-        re#^QUERY .*io.picolabs.pico-engine-ui/#,
-        re#^QUERY .*io.picolabs.subscription/established#,
-      ]
+      ent:omitQuery := {
+        "io.picolabs.pico-engine-ui": "",
+        "io.picolabs.subscription": "established",
+      }
     }
   }
 }
