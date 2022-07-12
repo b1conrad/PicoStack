@@ -67,7 +67,12 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logging settings</h1>
-<pre><code>#{ent:omitQuery.map(oqs).join(chr(10))}</code></pre>
+<pre><code>#{
+  ent:omitQuery
+    .map(oqs)
+    .values()
+    .join(chr(10))
+}</code></pre>
 >>
       + html:footer()
     }
