@@ -32,10 +32,11 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 >>
     log_li = function(episode,index){
       key = episode{"time"} + " - " + episode{"header"}
+      entries = episode{"entries"}
       <<<li>
-  <input type="checkbox" id="episode-#{index}">
+  <input type="checkbox" id="episode-#{index}" title="#{entries.length()}">
   <label for="episode-#{index}">#{key}</label>
-  <pre class="logging-detail">#{episode{"entries"}.join(chr(10))}
+  <pre class="logging-detail">#{entries.join(chr(10))}
 </pre>
 </li>
 >>
