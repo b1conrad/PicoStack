@@ -9,22 +9,17 @@ ruleset org.picostack.logging {
     event_domain = "org_picostack_logging"
     styles = <<<style type="text/css">
 ul#logging-list {
-  margin: 0px;
   padding: 0px;
-  list-style-type: none;
-  width: auto;
 }
 ul#logging-list li {
-  white-space: pre;
+  white-space: nowrap;
   font-family: monospace;
-  display: block;
 }
 .logging-detail {
   margin: 0 0 0 18px;
   display: none;
 }
 ul#logging-list label {
-  display: inline-block;
   cursor: pointer;
 }
 ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
@@ -35,7 +30,8 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
     log_li = function(episode,index){
       key = episode{"time"} + " - " + episode{"header"}
       <<<li>
-  <input type="checkbox" id="episode-#{index}"> <label for="episode-#{index}">#{key}</label>
+  <input type="checkbox" id="episode-#{index}">
+  <label for="episode-#{index}">#{key}</label>
   <pre class="logging-detail">#{episode{"entries"}.join(chr(10))}
 </pre>
 </li>
