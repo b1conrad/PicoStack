@@ -72,14 +72,16 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 * Internal: logs function
 */
     oqs = function(v,k){
-      k + (v => "/" + v | "")
+      k + "/" + (v => v | ".*")
     }
     logs = function(){
+      toRegExpAtEnd = function(s){(s+"$").as("RegExp")}
+      omitQueryREs = ent:omitQuery.map(oqs).values().map(toRegExpAtEnd)
       keep_all_but_common_queries = function(g){
         hdrs = g.get("header") // QUERY ECI RID/NAME ARGS
           .split(" ")
         hdrs.head() != "QUERY"
-        || ent:omitQuery.map(oqs).values().none(function(s){s == hdrs[2]})
+          || omitQueryREs.none(function(re){hdrs[2].match(re)})
       }
       logOther = function(entry){
         entry.delete("time")
