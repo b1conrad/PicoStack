@@ -42,7 +42,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
     }
     log = function(_headers){
 //      since = ent:episodes.head().get("time") || ""
-      episodes = logs()
+      episodes = logs().slice(0,ent:count-1)
 //        .filter(function(e){e{"time"} > since})
 //        .append(ent:episodes)
       html:header("manage logs",styles,null,null,_headers)
@@ -64,7 +64,10 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logging settings</h1>
+<h2>Omit queries matching:</h2>
 <pre><code>#{ent:omitQuery.map(oqs).values().join(chr(10))}</code></pre>
+<h2>Display how many episodes</h2>
+<p>#{ent:count}</p>
 >>
       + html:footer()
     }
@@ -178,6 +181,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
         "io.picolabs.pico-engine-ui": "",
         "io.picolabs.subscription": "established",
       }
+      ent:count := 20
     }
   }
 }
