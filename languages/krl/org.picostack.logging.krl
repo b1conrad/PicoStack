@@ -47,7 +47,10 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 //        .append(ent:episodes)
       html:header("manage logs",styles,null,null,_headers)
       + <<
-<h1 style="float:right" title="Settings" onclick="location='settings.html'">⚙</h1>
+<h1
+  style="float:right;cursor:pointer"
+  title="Settings"
+  onclick="location='settings.html'">⚙</h1>
 <h1>Manage logs</h1>
 <ul id="logging-list">
 #{episodes.map(log_li).join("")}</ul>
@@ -61,6 +64,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logging settings</h1>
+<pre><code>#{ent:omitQuery.encode()}</code></pre>
 >>
       + html:footer()
     }
