@@ -18,15 +18,18 @@ ul#logging-list li {
   white-space: nowrap;
   font-family: monospace;
 }
-.logging-detail {
-  margin: 0 0 0 18px;
-  display: none;
-}
 ul#logging-list label {
   cursor: pointer;
 }
 ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
   display: block;
+}
+.logging-detail {
+  margin: 0 0 0 18px;
+  display: none;
+}
+.logging-detail span {
+  cursor: pointer;
 }
 </style>
 >>
