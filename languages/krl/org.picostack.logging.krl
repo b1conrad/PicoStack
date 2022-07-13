@@ -33,7 +33,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
     log_entry = function(entry){
       eats = " event added to schedule "
       parts = entry.split(eats)
-      parts.length() == 0 => entry
+      parts.length() == 1 => entry
       | parts[0] + eats + "<span>" + parts[1] + "</span>"
     }
     log_li = function(episode,index){
