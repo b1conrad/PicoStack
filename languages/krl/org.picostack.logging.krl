@@ -34,7 +34,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
       eats = " event added to schedule "
       parts = entry.split(eats)
       parts.length() == 1 => entry
-      | parts[0] + eats + "<span>" + parts[1] + "</span>"
+      | parts[0] + eats + "<span onclick='shwj(event)'>" + parts[1] + "</span>"
     }
     log_li = function(episode,index){
       key = episode{"time"} + " - " + episode{"header"}
@@ -60,6 +60,11 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 <h1>Manage logs</h1>
 <ul id="logging-list">
 #{episodes.map(log_li).join("")}</ul>
+<script type="text/javascript">
+function shwj(event){
+  alert(JSON.stringify(JSON.parse(event.target.textContent),undefined,2));
+}
+</script>
 >>
       + html:footer()
     }
