@@ -31,7 +31,10 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 </style>
 >>
     log_entry = function(entry){
-      entry
+      eats = " event added to schedule "
+      parts = entry.split(eats)
+      parts.length() == 0 => entry
+      | parts[0] + eats + "<span>" + parts[1] + "</span>"
     }
     log_li = function(episode,index){
       key = episode{"time"} + " - " + episode{"header"}
