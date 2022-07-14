@@ -63,12 +63,8 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 <h1>Manage logs</h1>
 <ul id="logging-list">
 #{episodes.map(log_li).join("")}</ul>
-<script type="text/javascript">
-function shwj(event){
-  alert(JSON.stringify(JSON.parse(event.target.textContent),undefined,2));
-}
-</script>
 >>
+      + modal_html
       + html:footer()
     }
 /*
@@ -165,6 +161,65 @@ function shwj(event){
         .filter(keep_all_but_common_queries)
         .reverse()
     }
+/*
+* Modal box to display JSON
+*/
+    modal_html = <<
+<style>
+#modal {
+  background-color: #F1F0EC;
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0);
+  width: 800px; max-width: 80%;
+  border: 1px solid black; border-radius: 10px;
+  transition: 300ms ease-in-out;
+}
+#modal.active {
+  transform: translate(-50%,-50%) scale(1);
+}
+#modal-close {
+  float: right; cursor: pointer;
+  border: none; background: none;
+  font-size: 1.25rem; font-weight: bold;
+}
+#modal-pre {
+  overflow: overlay;
+  padding: 0 5px;
+  background-color: #F1F0EC;
+}
+#shadow {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,.5); opacity: 0;
+  pointer-events: none;
+  transition: 300ms ease-in-out;
+}
+#shadow.active {
+  opacity: 0.5;
+  pointer-events: all;
+}
+</style>
+<div id="shadow" onclick="clearModal()"></div>
+<div id="modal">
+  <button id="modal-close" onclick="clearModal()">&times;</button>
+  <pre id="modal-pre"></pre>
+</div>
+
+<script type="text/javascript">
+const the_modal_pre = document.getElementById('modal-pre');
+const the_modal = document.getElementById('modal');
+const the_shadow = document.getElementById('shadow');
+function shwj(event){
+  var j = JSON.stringify(JSON.parse(event.target.textContent),undefined,2);
+  the_modal_pre.textContent = j;
+  the_modal.classList.add('active');
+  the_shadow.classList.add('active');
+}
+function clearModal(){
+  the_shadow.classList.remove('active');
+  the_modal.classList.remove('active');
+}
+</script>
+>>
   }
 /*
 * Rules
