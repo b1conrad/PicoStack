@@ -260,7 +260,10 @@ function clearModal(){
     select when org_picostack_logging new_settings
       count re#^(\d\d+)$#
       setting(new_count)
-    send_directive("_redirect",{"url":"log.html"})
+    pre {
+      log_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/log.html>>
+    }
+    send_directive("_redirect",{"url":log_url})
     fired {
       ent:count := new_count
     }
