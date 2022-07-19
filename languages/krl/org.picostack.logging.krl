@@ -71,6 +71,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 * Page: settings.html
 */
     settings = function(_headers){
+      url = <<#{meta:host}/sky/event/#{meta:eci}/#{event_domain}/new_settings>>
       html:header("manage logs",styles,null,null,_headers)
       + <<
 <h1>Manage logging settings</h1>
@@ -78,6 +79,10 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 <pre><code>#{ent:omitQuery.map(oqs).values().join(chr(10))}</code></pre>
 <h2>Display how many episodes</h2>
 <pre><code>#{ent:count}</pre><code>
+<form action="#{url}">
+<input type="number" name="count" value="#{ent:count}" min="10"><br>
+<button type="submit">Apply changes</button>
+</form>
 >>
       + html:footer()
     }
@@ -251,5 +256,10 @@ function clearModal(){
       }
       ent:count := 20
     }
+  }
+  rule applySettings {
+    select when org_picostack_logging new_settings
+      count re#^(\d+)$#
+      setting(count)
   }
 }
