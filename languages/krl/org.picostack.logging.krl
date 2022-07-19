@@ -81,6 +81,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
 <form action="#{url}">
 <input type="number" name="count" value="#{ent:count}" min="10"><br>
 <button type="submit">Apply changes</button>
+<button onclick="location=document.referrer';return false">Cancel</a>
 </form>
 >>
       + html:footer()
