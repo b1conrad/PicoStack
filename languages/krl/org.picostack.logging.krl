@@ -175,7 +175,7 @@ ul#logging-list li input[type="checkbox"]:checked ~ .logging-detail {
   background-color: #F1F0EC;
   position: fixed; top: 50%; left: 50%;
   transform: translate(-50%,-50%) scale(0);
-  width: 800px; max-width: 80%; max-height: 80%;
+  width: 800px; max-width: 80%;
   border: 1px solid black; border-radius: 10px;
   transition: 300ms ease-in-out;
 }
