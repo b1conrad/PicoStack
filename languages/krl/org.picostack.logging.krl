@@ -267,6 +267,7 @@ function clearModal(){
     send_directive("_redirect",{"url":log_url})
     fired {
       ent:count := new_count
+      raise org_picostack_logging event "settings_changed" attributes event:attrs
     }
   }
 }
