@@ -59,7 +59,7 @@ API key: <input name="api_key" type="password" autofocus>
       api_key re#(.+)# setting(api_key)
     fired {
       ent:api_key := api_key
-      raise my_movies_app event "new_api_key"
+      raise my_movies_app event "new_api_key" attributes event:attrs
     }
   }
   rule getMovieGenres {
@@ -71,7 +71,7 @@ API key: <input name="api_key" type="password" autofocus>
     }
     fired {
       ent:genres := the_genres
-      raise my_movies_app event "new_genres"
+      raise my_movies_app event "new_genres" attributes event:attrs
     }
   }
   rule redirectBack {
