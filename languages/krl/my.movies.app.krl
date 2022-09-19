@@ -71,6 +71,14 @@ API key: <input name="api_key" type="password">
     }
     fired {
       ent:genres := the_genres
+      raise my_movies_app event "new_genres"
     }
+  }
+  rule redirectBack {
+    select when my_movies_app new_genres
+    pre {
+      referrer = event:attr("_headers").get("referer") // sic
+    }
+    if referrer then send_directive("_redirect",{"url":referrer})
   }
 }
