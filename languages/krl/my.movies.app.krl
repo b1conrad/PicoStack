@@ -29,7 +29,7 @@ ruleset my.movies.app {
       + <<
 <h1>Movie settings</h1>
 <form action="#{<<#{meta:host}/sky/event/#{meta:eci}/none/my_movies_app/new_settings>>}">
-API key: <input name="api_key" type="password">
+API key: <input name="api_key" type="password" autofocus>
 <button type="submit">Save changes</button>
 </form>
 >>
