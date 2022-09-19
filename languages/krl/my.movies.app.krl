@@ -21,6 +21,7 @@ ruleset my.movies.app {
 </select>
 <button type="submit">See movies</button>
 </form>
+<p>This product uses the TMDb API but is not endorsed or certified by <a href="https://www.themoviedb.org/">TMDb</a>.</p>
 >>
       + html:footer()
     }
