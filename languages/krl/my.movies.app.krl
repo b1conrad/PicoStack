@@ -8,7 +8,6 @@ ruleset my.movies.app {
   global {
     event_domain = "my_movies_app"
     genres = function(){
-      ent:api_key.isnull() => settings() |
       html:header("movie genres","")
       + <<
 <h1>Movie genres</h1>
@@ -22,17 +21,6 @@ ruleset my.movies.app {
 <button type="submit">See movies</button>
 </form>
 <p>This product uses the TMDb API but is not endorsed or certified by <a href="https://www.themoviedb.org/">TMDb</a>.</p>
->>
-      + html:footer()
-    }
-    settings = function(){
-      html:header("movie settings","")
-      + <<
-<h1>Movie settings</h1>
-<form action="#{<<#{meta:host}/sky/event/#{meta:eci}/none/my_movies_app/new_settings>>}">
-API key: <input name="api_key" type="password" autofocus>
-<button type="submit">Save changes</button>
-</form>
 >>
       + html:footer()
     }
@@ -56,10 +44,9 @@ API key: <input name="api_key" type="password" autofocus>
     wrangler:deleteChannel(chan.get("id"))
   }
   rule saveAPIkey {
-    select when my_movies_app new_settings
-      api_key re#(.+)# setting(api_key)
+    select when my_movies_app factory_reset
     fired {
-      ent:api_key := api_key
+      ent:api_key := ctx:rid_config{"api_key"}
       raise my_movies_app event "new_api_key" attributes event:attrs
     }
   }
@@ -74,12 +61,5 @@ API key: <input name="api_key" type="password" autofocus>
       ent:genres := the_genres
       raise my_movies_app event "new_genres" attributes event:attrs
     }
-  }
-  rule redirectBack {
-    select when my_movies_app new_genres
-    pre {
-      referrer = event:attr("_headers").get("referer") // sic
-    }
-    if referrer then send_directive("_redirect",{"url":referrer})
   }
 }
