@@ -3,6 +3,7 @@ ruleset my.movies.app {
     name "movies"
     use module io.picolabs.wrangler alias wrangler
     use module html
+    use module org.themoviedb.sdk alias tmdb
     shares genres
   }
   global {
@@ -43,22 +44,10 @@ ruleset my.movies.app {
     foreach wrangler:channels(["movies"]).reverse().tail() setting(chan)
     wrangler:deleteChannel(chan.get("id"))
   }
-  rule saveAPIkey {
+  rule getMovieGenres {
     select when my_movies_app factory_reset
     fired {
-      ent:api_key := ctx:rid_config{"api_key"}
-      raise my_movies_app event "new_api_key" attributes event:attrs
-    }
-  }
-  rule getMovieGenres {
-    select when my_movies_app new_api_key
-    pre {
-      the_url = "https://api.themoviedb.org/3/genre/movie/list?api_key="
-      response = http:get(the_url+ent:api_key)
-      the_genres = response.get("content").decode().get("genres")
-    }
-    fired {
-      ent:genres := the_genres
+      ent:genres := tmdb:genre_movie_list()
       raise my_movies_app event "new_genres" attributes event:attrs
     }
   }
