@@ -14,7 +14,7 @@ ruleset com.mailjet.sdk {
         "From":{"Email":email,"Name":from_name},
         "To": [{"Email":to}],
         "Subject": subject,
-        "TextPart": event:attr("text")
+        "TextPart": text,
       }
       msgs = {}.put("Messages",[msg])
       http:post(send_url,auth=basic,json=msgs) setting(response)
