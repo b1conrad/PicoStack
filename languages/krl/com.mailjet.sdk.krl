@@ -14,7 +14,7 @@ ruleset com.mailjet.sdk {
         "From":{"Email":email,"Name":from_name},
         "To": [{"Email":to}],
         "Subject": subject,
-        "TextPart": text,
+        "TextPart": text || "",
       }
       msgs = {}.put("Messages",[msg])
       http:post(send_url,auth=basic,json=msgs) setting(response)
@@ -29,12 +29,12 @@ ruleset com.mailjet.sdk {
     {
       "From": {
         "Email": email,
-        "Name": name
+        "Name": from_name
       },
       "To": [
         {
           "Email": email,
-          "Name": name
+          "Name": from_name
         }
       ],
       "Subject": "My first Mailjet email",
