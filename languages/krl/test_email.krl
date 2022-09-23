@@ -15,9 +15,27 @@ ruleset test_email {
   }
   rule firstEmail {
     select when test_email first_email
-    email:send() setting(response)
+      name re#(.+)# setting(name)
+    email:send_first(name) setting(response)
     fired {
-      ent:lastResponse := response
+      raise test_email event "message_sent" attributes response
+    }
+  }
+  rule sendMinimalMessage {
+    select when test_email new_text_message
+      to re#(.+)# subject re#(.+)# setting(to,subject)
+    pre {
+      text = event:attr("text") || ""
+    }
+    email:send_text(to,subject,text) setting(response)
+    fired {
+      raise test_email event "message_sent" attributes response
+    }
+  }
+  rule handleResponse {
+    select when test_email message_sent
+    fired {
+      ent:lastResponse := event:attrs
     }
   }
 }
