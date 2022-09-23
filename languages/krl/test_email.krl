@@ -8,7 +8,9 @@ ruleset test_email {
       ent:lastResponse
     }
     last_content = function(){
-      ent:lastResponse{"content"}
+      ent:lastResponse
+        .get("content")
+        .decode()
     }
   }
   rule firstEmail {
