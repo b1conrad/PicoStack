@@ -13,7 +13,7 @@ ruleset com.mailjet.sdk {
       msg = {
         "From":{"Email":email,"Name":from_name},
         "To": [{"Email":to}],
-        "Subject": subject,
+        "Subject": subject || "no subject",
         "TextPart": text || "empty",
       }
       msgs = {}.put("Messages",[msg])
@@ -23,7 +23,7 @@ ruleset com.mailjet.sdk {
     send_first = defaction(name){
       msgs =
 // copy JSON from app.mailjet.com/auth/get_started/developer
-// plugging in values for "Email" and "Name"
+// plugging in values for "Email" and "Name" from ruleset config
 {
   "Messages":[
     {
