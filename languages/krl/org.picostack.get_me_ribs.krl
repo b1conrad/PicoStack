@@ -15,19 +15,27 @@ ruleset org.picostack.get_me_ribs {
 	  .content {padding-left:1.5em;}
 	</style>
 >>
-      display_date = time:now().split("T").head()
-      today = display_date.split("-").join("")
+      now = time:now()
+      display_date = time:strftime(now, "%A, %d %b %Y")
+      today = now.split("T").head().split("-").join("")
       url = "https://dining-services-batch-495348054234.s3-us-west-2.amazonaws.com/dining/Cannon/" + today
       response = http:get(url)
       ok = response{"status_code"} == 200
       lunch = response{"content"}.decode()[1]
       lunch_categories = lunch{"categories"}
+      interesting_item = function(answer, menu_item) {
+	answer => answer | menu_item{"name"}.match(re#ribs#i)
+      }
+      has_ribs = lunch_categories.reduce(function(answer, map) {
+	answer => answer | map{"menu_items"}.reduce(interesting_item, false)
+      }, false)
       lunch_cartegory_names = lunch_categories.map(function(v) {v{"name"}})
       real_food = function(mi) {mi{"header"} == false}
       html:header("manage ribs_on_menus",styles,null,null,_headers)
       + <<
 <div class="content">
 <h1>Cannon Center Lunch for #{display_date}</h1>
+<h2>Today's Menu Contains Ribs : #{has_ribs}</h2>
   #{lunch_categories.map(function(v) {
     <<
 <h2>#{v{"name"}} <span>(#{v{"menu_items"}.filter(real_food).length()} items)</span></h2> 
