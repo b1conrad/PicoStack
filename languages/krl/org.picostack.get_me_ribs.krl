@@ -10,16 +10,39 @@ ruleset org.picostack.get_me_ribs {
     ribs_on_menu = function(_headers){
       styles = <<
 	<style>
-	  h2 {color:green;font-weight:lighter;}
+	  .header {font-weight:bold;list-style-type:none;padding-top:0.5em;margin-left:-1.5em;}
+	  h2 span {font-size:75%;font-weight:lighter;}
+	  .content {padding-left:1.5em;}
 	</style>
 >>
+      display_date = time:now().split("T").head()
+      today = display_date.split("-").join("")
+      url = "https://dining-services-batch-495348054234.s3-us-west-2.amazonaws.com/dining/Cannon/" + today
+      response = http:get(url)
+      ok = response{"status_code"} == 200
+      lunch = response{"content"}.decode()[1]
+      lunch_categories = lunch{"categories"}
+      lunch_cartegory_names = lunch_categories.map(function(v) {v{"name"}})
+      real_food = function(mi) {mi{"header"} == false}
       html:header("manage ribs_on_menus",styles,null,null,_headers)
       + <<
-<h1>Manage ribs_on_menus</h1>
-<h2>hello world!</h2>
-<pre>
-	#{http:get("https://dining-services-batch-495348054234.s3-us-west-2.amazonaws.com/dining/Cannon/20221108").encode()}
-</pre>
+<div class="content">
+<h1>Cannon Center Lunch for #{display_date}</h1>
+  #{lunch_categories.map(function(v) {
+    <<
+<h2>#{v{"name"}} <span>(#{v{"menu_items"}.filter(real_food).length()} items)</span></h2> 
+<ul>
+#{v{"menu_items"}.map(function(mi) {
+  <<
+    <li#{mi{"header"} => << class="header">> | ""}>#{mi{"name"}}</li>
+  >>
+}).join("")
+}
+</ul>
+>>
+}).join("")
+  }
+</div>
 >>
       + html:footer()
     }
