@@ -27,8 +27,10 @@ ruleset org.picostack.get_me_ribs {
       ok = response{"status_code"} == 200
       lunch = response{"content"}.decode()[1]
       lunch_categories = lunch{"categories"}
+      itemRE = (ent:item_pattern || re#ribs#i)
+      item_name = "Ribs"
       interesting_item = function(answer, menu_item) {
-	answer => answer | menu_item{"name"}.match(re#ribs#i)
+	answer => answer | menu_item{"name"}.match(itemRE)
       }
       has_ribs = lunch_categories.reduce(function(answer, map) {
 	answer => answer | map{"menu_items"}.reduce(interesting_item, false)
@@ -41,7 +43,7 @@ ruleset org.picostack.get_me_ribs {
 <h1>Cannon Center Lunch for #{display_date}</h1>
 <a href="#{nav_url}#{day_to_add - 1}">Prior Day</a> 
 #{day_to_add < 10 => <<<a href="#{nav_url}#{day_to_add + 1}">Next Day</a> >> | ""}
-<h2 class="#{has_ribs => "has_ribs" | "no_ribs"}">Today's Menu #{has_ribs => "Does" | "Does Not"} Have Ribs</h2>
+<h2 class="#{has_ribs => "has_ribs" | "no_ribs"}">Today's Menu #{has_ribs => "Does" | "Does Not"} Have #{item_name}</h2>
   #{lunch_categories.map(function(v) {
     <<
 <h2>#{v{"name"}} <span>(#{v{"menu_items"}.filter(real_food).length()} items)</span></h2> 
@@ -57,6 +59,16 @@ ruleset org.picostack.get_me_ribs {
 }).join("")
   }
 </div>
+<h2>Experimental</h2>
+<form action="x_url">
+It may not be ribs!
+Name your favorite food
+<input type="text" name="item_name" required>
+and say what to search for in the menu items
+<input type="text" name="item_pattern" required pattern="[a-z]+" title="lower-case">,
+then click
+<button type="submit">Submit</button>.
+</form>
 >>
       + html:footer()
     }
@@ -78,5 +90,30 @@ ruleset org.picostack.get_me_ribs {
     select when org_picostack_get_me_ribs factory_reset
     foreach wrangler:channels(["ribs_on_menus"]).reverse().tail() setting(chan)
     wrangler:deleteChannel(chan.get("id"))
+  }
+  rule changeWantedItem {
+    select when org_picostack_get_me_ribs new_wanted_item
+      item_name re#(.+)#
+      item_pattern re#(.+)#
+      setting(item_name,item_pattern)
+    pre {
+     its_ribs = item_name == "Ribs" && item_pattern == "rib"
+     itemRE = item_pattern.as("RegExp","i")
+    }
+    if not its_ribs then noop()
+    fired {
+      ent:item_name := item_name
+      ent:item_pattern := itemRE
+    } else {
+      clear ent:item_name
+      clear ent:item_pattern
+    }
+  }
+  rule redirectBack {
+    select when org_picostack_get_me_ribs new_wanted_item
+    pre {
+      referrer = event:attr("_headers").get("referer") // sic
+    }
+    if referrer then send_directive("_redirect",{"url":referrer})
   }
 }
