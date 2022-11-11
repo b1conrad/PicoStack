@@ -27,8 +27,8 @@ ruleset org.picostack.get_me_ribs {
       ok = response{"status_code"} == 200
       lunch = response{"content"}.decode()[1]
       lunch_categories = lunch{"categories"}
-      itemRE = (ent:item_pattern || re#ribs#i)
-      item_name = "Ribs"
+      itemRE = ent:item_pattern.defaultsTo(re#ribs#i)
+      item_name = ent:item_name.defaultsTo("Ribs")
       interesting_item = function(answer, menu_item) {
 	answer => answer | menu_item{"name"}.match(itemRE)
       }
