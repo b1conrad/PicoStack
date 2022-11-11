@@ -27,10 +27,10 @@ ruleset org.picostack.get_me_ribs {
       ok = response{"status_code"} == 200
       lunch = response{"content"}.decode()[1]
       lunch_categories = lunch{"categories"}
-      itemRE = ent:item_pattern.defaultsTo(re#ribs#i)
+      itemRE = ent:item_pattern.defaultsTo("rib").uc().as("RegExp")
       item_name = ent:item_name.defaultsTo("Ribs")
       interesting_item = function(answer, menu_item) {
-	answer => answer | menu_item{"name"}.match(itemRE)
+	answer => answer | menu_item{"name"}.uc().match(itemRE)
       }
       has_ribs = lunch_categories.reduce(function(answer, map) {
 	answer => answer | map{"menu_items"}.reduce(interesting_item, false)
@@ -99,12 +99,11 @@ then click
       setting(item_name,item_pattern)
     pre {
      its_ribs = item_name == "Ribs" && item_pattern == "rib"
-     itemRE = item_pattern.as("RegExp","i")
     }
     if not its_ribs then noop()
     fired {
       ent:item_name := item_name
-      ent:item_pattern := itemRE
+      ent:item_pattern := item_pattern
     } else {
       clear ent:item_name
       clear ent:item_pattern
