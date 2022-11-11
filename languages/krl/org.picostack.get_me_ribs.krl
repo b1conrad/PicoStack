@@ -61,7 +61,7 @@ ruleset org.picostack.get_me_ribs {
   }
 </div>
 <h2>Experimental</h2>
-<form action="x_url">
+<form action="#{x_url}">
 It may not be ribs!
 Name your favorite food
 <input type="text" name="item_name" required>
