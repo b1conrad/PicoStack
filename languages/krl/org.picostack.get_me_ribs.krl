@@ -37,6 +37,7 @@ ruleset org.picostack.get_me_ribs {
       }, false)
       lunch_cartegory_names = lunch_categories.map(function(v) {v{"name"}})
       real_food = function(mi) {mi{"header"} == false}
+      x_url = <<#{meta:host}/sky/event/#{meta:eci}/experiment/#{event_domain}/new_wanted_item>>
       html:header("manage ribs_on_menus",styles,null,null,_headers)
       + <<
 <div class="content">
