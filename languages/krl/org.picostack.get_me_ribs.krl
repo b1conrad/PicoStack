@@ -64,9 +64,9 @@ ruleset org.picostack.get_me_ribs {
 <form action="#{x_url}">
 It may not be ribs!
 Name your favorite food
-<input type="text" name="item_name" required>
+<input type="text" name="item_name" value="Ribs" required>
 and say what to search for in the menu items
-<input type="text" name="item_pattern" required pattern="[a-z]+" title="lower-case">,
+<input type="text" name="item_pattern" value="rib" required pattern="[a-z]+" title="lower-case">,
 then click
 <button type="submit">Submit</button>.
 </form>
