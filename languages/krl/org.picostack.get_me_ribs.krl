@@ -109,7 +109,7 @@ then click
       item_pattern re#(.+)#
       setting(item_name,item_pattern)
     pre {
-     its_ribs = item_name == "Ribs" && item_pattern == "rib"
+      its_ribs = item_name == "Ribs" && item_pattern == "rib"
     }
     if not its_ribs then noop()
     fired {
@@ -119,12 +119,15 @@ then click
       clear ent:item_name
       clear ent:item_pattern
     }
+    finally {
+      raise org_picostack_get_me_ribs event "settings_changed" attributes event:attrs
+    }
   }
   rule redirectBack {
     select when org_picostack_get_me_ribs new_wanted_item
     pre {
-      referrer = event:attr("_headers").get("referer") // sic
+      main_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/ribs_on_menu.html>>
     }
-    if referrer then send_directive("_redirect",{"url":referrer})
+    send_directive("_redirect",{"url":main_url})
   }
 }
