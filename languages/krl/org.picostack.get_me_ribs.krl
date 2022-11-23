@@ -24,10 +24,9 @@ ruleset org.picostack.get_me_ribs {
       today = date_to_check.split("T").head().split("-").join("")
       url = "https://dining-services-batch-495348054234.s3-us-west-2.amazonaws.com/dining/Cannon/" + today
       response = http:get(url)
-.klog("response")
       ok = response{"status_code"} == 200
       lunch = ok => response{"content"}.decode()[1] | {}
-      lunch_categories = lunch{"categories"} || []
+      lunch_categories = lunch{"categories"} || [{"name":"NO DATA","menu_items":[]}]
       itemRE = ent:item_pattern.defaultsTo("rib").uc().as("RegExp")
       item_name = ent:item_name.defaultsTo("Ribs")
       interesting_item = function(answer, menu_item) {
