@@ -44,7 +44,7 @@ ruleset org.picostack.get_me_ribs {
 <div class="content">
 <h1>Cannon Center Lunch for #{display_date}</h1>
 <a href="#{nav_url}#{day_to_add - 1}">Prior Day</a> 
-#{day_to_add < 10 => <<<a href="#{nav_url}#{day_to_add + 1}">Next Day</a> >> | ""}
+#{ok && day_to_add < 10 => <<<a href="#{nav_url}#{day_to_add + 1}">Next Day</a> >> | ""}
 <h2 class="#{has_ribs => "has_ribs" | "no_ribs"}">#{summary}</h2>
   #{lunch_categories.map(function(v) {
     <<
