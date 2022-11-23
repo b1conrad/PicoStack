@@ -3,7 +3,7 @@ ruleset org.picostack.get_me_ribs {
     name "ribs_on_menus"
     use module io.picolabs.wrangler alias wrangler
     use module html.byu alias html
-    shares ribs_on_menu
+    shares ribs_on_menu, settings
   }
   global {
     event_domain = "org_picostack_get_me_ribs"
@@ -36,11 +36,14 @@ ruleset org.picostack.get_me_ribs {
 	answer => answer | map{"menu_items"}.reduce(interesting_item, false)
       }, false)
       real_food = function(mi) {mi{"header"} == false}
-      x_url = <<#{meta:host}/sky/event/#{meta:eci}/experiment/#{event_domain}/new_wanted_item>>
       summary = ok => <<Today's Menu #{has_ribs => "Does" | "Does Not"} Have #{item_name}>>
                     | "NO DATA"
       html:header("manage ribs_on_menus",styles,null,null,_headers)
       + <<
+<h1
+  style="float:right;cursor:pointer"
+  title="Settings"
+  onclick="location='settings.html'">⚙</h1>
 <div class="content">
 <h1>Cannon Center Lunch for #{display_date}</h1>
 <a href="#{nav_url}#{day_to_add - 1}">Prior Day</a> 
@@ -61,6 +64,13 @@ ruleset org.picostack.get_me_ribs {
 }).join("")
   }
 </div>
+>>
+      + html:footer()
+    }
+    settings = function(_headers){
+      x_url = <<#{meta:host}/sky/event/#{meta:eci}/experiment/#{event_domain}/new_wanted_item>>
+      html:header("settings for ribs_on_menus","",null,null,_headers)
+      + <<
 <h2>Experimental</h2>
 <form action="#{x_url}">
 It may not be ribs!
