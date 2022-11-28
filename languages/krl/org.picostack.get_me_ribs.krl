@@ -85,21 +85,29 @@ td, th {
       html:header("settings for ribs_on_menus",styles,null,null,_headers)
       + <<
 <h1>Settings</h1>
+<form action="#{x_url}">
 <table>
 <tr>
 <th>Item name</th>
 <th>Item pattern</th>
+<th>Action</th>
 </tr>
 #{
-      fav_foods.map(function(v){
+      fav_foods.map(function(v,i){
         <<
 <tr>
 <td>#{v{"name"}}</td>
 <td>#{v{"regx"}}</td>
+<td>#{i => "" | "del"}</td>
 </tr>
 >>
       }).join("")
 }
+<tr>
+<td><input name="item_name" required></td>
+<td><input name="item_pattern" required pattern="[a-z]+" title="lower-case"></td>
+<td><button type="submit">add</button></td>
+</tr>
 </table>
 <h2>Experimental</h2>
 <form action="#{x_url}">
