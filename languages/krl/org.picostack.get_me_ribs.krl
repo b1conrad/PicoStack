@@ -109,6 +109,7 @@ td, th {
 <td><button type="submit">add</button></td>
 </tr>
 </table>
+</form>
 <h2>Experimental</h2>
 <form action="#{x_url}">
 It may not be ribs!
