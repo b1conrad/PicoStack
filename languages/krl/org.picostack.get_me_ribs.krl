@@ -68,9 +68,39 @@ ruleset org.picostack.get_me_ribs {
       + html:footer()
     }
     settings = function(_headers){
+      styles = <<
+<style type="text/css">
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+td, th {
+  border: 1px solid black;
+  padding: 5px;
+}
+</style>
+>>
+      fav_foods = ent:fav_foods || [{"name":ent:item_name,"regx":ent:item_pattern}]
       x_url = <<#{meta:host}/sky/event/#{meta:eci}/experiment/#{event_domain}/new_wanted_item>>
-      html:header("settings for ribs_on_menus","",null,null,_headers)
+      html:header("settings for ribs_on_menus",styles,null,null,_headers)
       + <<
+<h1>Settings</h1>
+<table>
+<tr>
+<th>Item name</th>
+<th>Item pattern</th>
+</tr>
+#{
+      fav_foods.map(function(v){
+        <<
+<tr>
+<td>#{v{"name"}}</td>
+<td>#{v{"regx"}}</td>
+</tr>
+>>
+      }).join("")
+}
+</table>
 <h2>Experimental</h2>
 <form action="#{x_url}">
 It may not be ribs!
