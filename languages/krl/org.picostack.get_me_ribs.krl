@@ -80,7 +80,9 @@ td, th {
 }
 </style>
 >>
-      fav_foods = ent:fav_foods || [{"name":ent:item_name,"regx":ent:item_pattern}]
+      fav_foods = ent:fav_foods
+        || [{"name":ent:item_name || "Ribs",
+             "regx":ent:item_pattern || "rib"}]
       x_url = <<#{meta:host}/sky/event/#{meta:eci}/experiment/#{event_domain}/new_wanted_item>>
       html:header("settings for ribs_on_menus",styles,null,null,_headers)
       + <<
