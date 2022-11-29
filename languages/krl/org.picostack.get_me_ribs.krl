@@ -100,6 +100,7 @@ td, th {
         || [{"name":ent:item_name || "Ribs",
              "regx":ent:item_pattern || "rib"}]
       x_url = <<#{meta:host}/sky/event/#{meta:eci}/experiment/#{event_domain}/new_wanted_item>>
+      test_url = <<#{meta:host}/sky/event/#{meta:eci}/test/#{event_domain}/it_is_morning>>
       html:header("settings for ribs_on_menus",styles,null,null,_headers)
       + <<
 <h1>Settings</h1>
@@ -138,6 +139,8 @@ and say what to search for in the menu items
 then click
 <button type="submit">Submit</button>.
 </form>
+<h2>Test morning notification</h2>
+<a href="#{test_url}">Test</a>
 >>
       + html:footer()
     }
