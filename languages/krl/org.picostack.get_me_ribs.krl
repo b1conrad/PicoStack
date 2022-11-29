@@ -30,6 +30,10 @@ ruleset org.picostack.get_me_ribs {
       has_ribs => item_name | ""
       // fav_foods.reduce(fav_food_name,"") // item_name of first favorite food found
     }
+    summary_text = function(found_fav_food){
+      food_name = found_fav_food || "Any Favorite Foods"
+      <<Today's Menu #{found_fav_food => "Does" | "Does Not"} Have #{food_name}>>
+    }
     ribs_on_menu = function(_headers, days_in_future){
       styles = <<
 	<style>
@@ -48,7 +52,7 @@ ruleset org.picostack.get_me_ribs {
       ok = lunch_categories.length()
       found_fav_food = lunch_categories.has_fav_food()
       real_food = function(mi) {mi{"header"} == false}
-      summary = ok => <<Today's Menu #{found_fav_food => "Does" | "Does Not"} Have #{found_fav_food}>>
+      summary = ok => found_fav_food.summary_text()
                     | "NO DATA"
       html:header("manage ribs_on_menus",styles,null,null,_headers)
       + <<
