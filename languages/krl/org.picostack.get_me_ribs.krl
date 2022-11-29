@@ -31,7 +31,7 @@ ruleset org.picostack.get_me_ribs {
       // fav_foods.reduce(fav_food_name,"") // item_name of first favorite food found
     }
     summary_text = function(found_fav_food){
-      food_name = found_fav_food || "Ribs" // "Any Favorite Foods"
+      food_name = found_fav_food || ent:item_name || "Ribs" // "Any Favorite Foods"
       <<Today's Menu #{found_fav_food => "Does" | "Does Not"} Have #{food_name}>>
     }
     ribs_on_menu = function(_headers, days_in_future){
