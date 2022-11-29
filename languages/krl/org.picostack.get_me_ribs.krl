@@ -15,6 +15,21 @@ ruleset org.picostack.get_me_ribs {
       lunch = ok => response{"content"}.decode()[1] | {}
       ok => lunch{"categories"} | []
     }
+    has_fav_food = function(menu){
+      fav_foods = ent:fav_foods
+        || [{"name":ent:item_name || "Ribs",
+             "regx":ent:item_pattern || "rib"}]
+      itemRE = ("\\b"+ent:item_pattern.defaultsTo("rib").uc()).as("RegExp")
+      item_name = ent:item_name.defaultsTo("Ribs")
+      interesting_item = function(answer, menu_item) {
+	answer => answer | menu_item{"name"}.uc().match(itemRE)
+      }
+      has_ribs = menu.reduce(function(answer, map) {
+	answer => answer | map{"menu_items"}.reduce(interesting_item, false)
+      }, false)
+      has_ribs => item_name | ""
+      // fav_foods.reduce(fav_food_name,"") // item_name of first favorite food found
+    }
     ribs_on_menu = function(_headers, days_in_future){
       styles = <<
 	<style>
@@ -31,16 +46,9 @@ ruleset org.picostack.get_me_ribs {
       display_date = time:strftime(date_to_check , "%A, %d %b %Y")
       lunch_categories = date_to_check.get_lunch_menu()
       ok = lunch_categories.length()
-      itemRE = ("\\b"+ent:item_pattern.defaultsTo("rib").uc()).as("RegExp")
-      item_name = ent:item_name.defaultsTo("Ribs")
-      interesting_item = function(answer, menu_item) {
-	answer => answer | menu_item{"name"}.uc().match(itemRE)
-      }
-      has_ribs = lunch_categories.reduce(function(answer, map) {
-	answer => answer | map{"menu_items"}.reduce(interesting_item, false)
-      }, false)
+      found_fav_food = lunch_categories.has_fav_food()
       real_food = function(mi) {mi{"header"} == false}
-      summary = ok => <<Today's Menu #{has_ribs => "Does" | "Does Not"} Have #{item_name}>>
+      summary = ok => <<Today's Menu #{found_fav_food => "Does" | "Does Not"} Have #{found_fav_food}>>
                     | "NO DATA"
       html:header("manage ribs_on_menus",styles,null,null,_headers)
       + <<
@@ -52,7 +60,7 @@ ruleset org.picostack.get_me_ribs {
 <h1>Cannon Center Lunch for #{display_date}</h1>
 <a href="#{nav_url}#{day_to_add - 1}">Prior Day</a> 
 #{ok && day_to_add < 10 => <<<a href="#{nav_url}#{day_to_add + 1}">Next Day</a> >> | ""}
-<h2 class="#{has_ribs => "has_ribs" | "no_ribs"}">#{summary}</h2>
+<h2 class="#{found_fav_food => "has_ribs" | "no_ribs"}">#{summary}</h2>
   #{lunch_categories.map(function(v) {
     <<
 <h2>#{v{"name"}} <span>(#{v{"menu_items"}.filter(real_food).length()} items)</span></h2> 
