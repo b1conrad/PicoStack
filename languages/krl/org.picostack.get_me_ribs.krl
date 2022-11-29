@@ -7,6 +7,14 @@ ruleset org.picostack.get_me_ribs {
   }
   global {
     event_domain = "org_picostack_get_me_ribs"
+    get_lunch_menu = function(dt){
+      date_only = dt.split("T").head().split("-").join("")
+      url = "https://dining-services-batch-495348054234.s3-us-west-2.amazonaws.com/dining/Cannon/" + date_only
+      response = http:get(url)
+      ok = response{"status_code"} == 200
+      lunch = ok => response{"content"}.decode()[1] | {}
+      ok => lunch{"categories"} | []
+    }
     ribs_on_menu = function(_headers, days_in_future){
       styles = <<
 	<style>
@@ -21,12 +29,8 @@ ruleset org.picostack.get_me_ribs {
       day_to_add = days_in_future.as("Number") || 0
       date_to_check = time:add(time:now(), {"days": day_to_add || 0})
       display_date = time:strftime(date_to_check , "%A, %d %b %Y")
-      today = date_to_check.split("T").head().split("-").join("")
-      url = "https://dining-services-batch-495348054234.s3-us-west-2.amazonaws.com/dining/Cannon/" + today
-      response = http:get(url)
-      ok = response{"status_code"} == 200
-      lunch = ok => response{"content"}.decode()[1] | {}
-      lunch_categories = ok => lunch{"categories"} | []
+      lunch_categories = date_to_check.get_lunch_menu()
+      ok = lunch_categories.length()
       itemRE = ("\\b"+ent:item_pattern.defaultsTo("rib").uc()).as("RegExp")
       item_name = ent:item_name.defaultsTo("Ribs")
       interesting_item = function(answer, menu_item) {
