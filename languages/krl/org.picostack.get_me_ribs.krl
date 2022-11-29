@@ -187,4 +187,19 @@ then click
     }
     send_directive("_redirect",{"url":main_url})
   }
+  rule checkEveryMorning {
+    select when org_picostack_get_me_ribs it_is_morning
+    pre {
+      menu = time:now().get_lunch_menu()
+      found_fav_food = menu.has_fav_food()
+    }
+    if found_fav_food then noop()
+    fired {
+      raise byname_notification event "status" attributes {
+        "application": meta:rid,
+	"subject": "Cannon Has " + found_fav_food,
+	"description": "Found " + found_fav_food.lc() + "on the menu today!"
+      }
+    }
+  }
 }
