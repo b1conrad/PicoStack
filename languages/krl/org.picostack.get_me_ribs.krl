@@ -201,7 +201,7 @@ then click
       raise byname_notification event "status" attributes {
         "application": meta:rid,
 	"subject": "Cannon Has " + found_fav_food,
-	"description": "Found " + found_fav_food.lc() + "on the menu today!"
+	"description": "Found " + found_fav_food.lc() + " on the menu today!"
       }
     }
   }
