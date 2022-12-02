@@ -3,7 +3,7 @@ ruleset org.picostack.get_me_ribs {
     name "ribs_on_menus"
     use module io.picolabs.wrangler alias wrangler
     use module html.byu alias html
-    shares ribs_on_menu, settings
+    shares ribs_on_menu, settings, id
   }
   global {
     event_domain = "org_picostack_get_me_ribs"
@@ -16,23 +16,22 @@ ruleset org.picostack.get_me_ribs {
       ok => lunch{"categories"} | []
     }
     has_fav_food = function(menu){
-      fav_foods = ent:fav_foods
-        || [{"name":ent:item_name || "Ribs",
-             "regx":ent:item_pattern || "rib"}]
-      itemRE = ("\\b"+ent:item_pattern.defaultsTo("rib").uc()).as("RegExp")
-      item_name = ent:item_name.defaultsTo("Ribs")
-      interesting_item = function(answer, menu_item) {
-	answer => answer | menu_item{"name"}.uc().match(itemRE)
+      fav_food_name = function(ans,fav){
+        itemRE = ("\\b"+fav{"regx"}.uc()).as("RegExp")
+        item_name = fav{"name"}
+        interesting_item = function(answer, menu_item) {
+	  answer || menu_item{"name"}.uc().match(itemRE)
+        }
+        has_food = menu.reduce(function(answer, map) {
+	  answer || map{"menu_items"}.reduce(interesting_item, false)
+        }, false)
+        ans || (has_food => item_name | "")
       }
-      has_ribs = menu.reduce(function(answer, map) {
-	answer => answer | map{"menu_items"}.reduce(interesting_item, false)
-      }, false)
-      has_ribs => item_name | ""
-      // fav_foods.reduce(fav_food_name,"") // item_name of first favorite food found
+      ent:fav_foods.values().reduce(fav_food_name,"") // item_name of first favorite food found
     }
     summary_text = function(found_fav_food){
-      food_name = found_fav_food || ent:item_name || "Ribs" // "Any Favorite Foods"
-      <<Today's Menu #{found_fav_food => "Does" | "Does Not"} Have #{food_name}>>
+      food_name = found_fav_food || ent:fav_foods.keys().join(" or ")
+      <<Today's Menu #{found_fav_food => "Has" | "Does Not Have"} #{food_name}>>
     }
     ribs_on_menu = function(_headers, days_in_future){
       styles = <<
@@ -96,14 +95,23 @@ td, th {
 }
 </style>
 >>
-      fav_foods = ent:fav_foods
-        || [{"name":ent:item_name || "Ribs",
-             "regx":ent:item_pattern || "rib"}]
-      x_url = <<#{meta:host}/sky/event/#{meta:eci}/experiment/#{event_domain}/new_wanted_item>>
-      test_url = <<#{meta:host}/sky/event/#{meta:eci}/test/#{event_domain}/it_is_morning>>
+      base_url = <<#{meta:host}/sky/event/#{meta:eci}>>
+      x_url = <<#{base_url}/experiment/#{event_domain}/new_wanted_item>>
+      test_url = <<#{base_url}/test/#{event_domain}/it_is_morning>>
+      del_url = <<#{base_url}/del/#{event_domain}/item_not_wanted>>
+      morning_url_on = <<#{base_url}/activate/#{event_domain}/morning_notification_wanted>>
+      morning_url_off = <<#{base_url}/deactivate/#{event_domain}/no_morning_notification>>
+      is_morning_event = function(s){
+                           s{["event","domain"]} == event_domain &&
+                           s{["event","name"]} == "it_is_morning"
+                         }
+      morning_event = schedule:list().filter(is_morning_event).head()
+      toggle_url = morning_event => morning_url_off+"?id="+morning_event{"id"} | morning_url_on
+      toggle_label = morning_event => "Turn off" | "Turn on"
       html:header("settings for ribs_on_menus",styles,null,null,_headers)
       + <<
 <h1>Settings</h1>
+<h2>Favorite food items:</h2>
 <form action="#{x_url}">
 <table>
 <tr>
@@ -112,37 +120,40 @@ td, th {
 <th>Action</th>
 </tr>
 #{
-      fav_foods.map(function(v,i){
+      ent:fav_foods.values().map(function(v,i){
         <<
 <tr>
 <td>#{v{"name"}}</td>
 <td>#{v{"regx"}}</td>
-<td>#{i => "" | "del"}</td>
+<td>#{i => <<<a href="#{del_url}?item_name=#{v{"name"}}">del</a> >> | "del"}</td>
 </tr>
 >>
       }).join("")
 }
 <tr>
 <td><input name="item_name" required></td>
-<td><input name="item_pattern" required pattern="[a-z]+" title="lower-case"></td>
+<td><input name="item_pattern" required pattern="[a-z][a-z]+" title="lower-case"></td>
 <td><button type="submit">add</button></td>
 </tr>
 </table>
 </form>
-<h2>Experimental</h2>
-<form action="#{x_url}">
-It may not be ribs!
-Name your favorite food
-<input type="text" name="item_name" value="Ribs" required>
-and say what to search for in the menu items
-<input type="text" name="item_pattern" value="rib" required pattern="[a-z]+" title="lower-case">,
-then click
-<button type="submit">Submit</button>.
-</form>
-<h2>Test morning notification</h2>
-<a href="#{test_url}">Test</a>
+<button onclick="location='ribs_on_menu.html'">Done</button>
+<h2>Morning notification</h2>
+<h3>Active?</h3>
+<p>#{
+  morning_event => "Yes" | "No"
+}
+<button onclick="location='#{toggle_url}'">#{toggle_label}</button>
+</p>
+<p>
+<button onclick="location='#{test_url}'">Test</button>
+to look for favorite foods and if found send notification now.
+</p>
 >>
       + html:footer()
+    }
+    id = function(){
+      ent:id
     }
   }
   rule initialize {
@@ -163,35 +174,38 @@ then click
     foreach wrangler:channels(["ribs_on_menus"]).reverse().tail() setting(chan)
     wrangler:deleteChannel(chan.get("id"))
   }
-  rule changeWantedItem {
+  rule initializeEntityVar {
+    select when org_picostack_get_me_ribs factory_reset
+    fired {
+      ent:fav_foods := {"Ribs":{"name":"Ribs","regx":"rib"}}
+    }
+  }
+  rule addWantedItem {
     select when org_picostack_get_me_ribs new_wanted_item
       item_name re#(.+)#
-      item_pattern re#(.+)#
+      item_pattern re#([a-z][a-z]+)#
       setting(item_name,item_pattern)
     pre {
-      its_ribs = item_name == "Ribs" && item_pattern == "rib"
+      new_item = {"name":item_name,"regx":item_pattern}
     }
-    if not its_ribs then noop()
     fired {
-      ent:item_name := item_name
-      ent:item_pattern := item_pattern
-    } else {
-      clear ent:item_name
-      clear ent:item_pattern
-    }
-    finally {
+      ent:fav_foods{item_name} := new_item
       raise org_picostack_get_me_ribs event "settings_changed" attributes event:attrs
     }
   }
-  rule redirectBack {
-    select when org_picostack_get_me_ribs new_wanted_item
-    pre {
-      main_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/ribs_on_menu.html>>
+  rule delUnwantedItem {
+    select when org_picostack_get_me_ribs item_not_wanted
+      item_name re#(.+)#
+      setting(item_name)
+    if ent:fav_foods >< item_name then noop()
+    fired {
+      clear ent:fav_foods{item_name}
+      raise org_picostack_get_me_ribs event "settings_changed" attributes event:attrs
     }
-    send_directive("_redirect",{"url":main_url})
   }
   rule checkEveryMorning {
     select when org_picostack_get_me_ribs it_is_morning
+             or notification eight_a_m
     pre {
       menu = time:now().get_lunch_menu()
       found_fav_food = menu.has_fav_food()
@@ -203,6 +217,32 @@ then click
 	"subject": "Cannon Has " + found_fav_food,
 	"description": "Found " + found_fav_food.lc() + " on the menu today!"
       }
+    }
+  }
+  rule redirectBack {
+    select when org_picostack_get_me_ribs settings_changed
+             or org_picostack_get_me_ribs it_is_morning
+             or org_picostack_get_me_ribs morning_notification_wanted
+             or org_picostack_get_me_ribs no_morning_notification
+    pre {
+      main_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/settings.html>>
+    }
+    send_directive("_redirect",{"url":main_url})
+  }
+  rule activateMorningNotification {
+    select when org_picostack_get_me_ribs morning_notification_wanted
+    fired {
+      schedule org_picostack_get_me_ribs event "it_is_morning"
+        repeat << 0 15 * * 1-5 >>  attributes { } setting(id)
+      ent:id := id
+    }
+  }
+  rule deactivateMorningNotification {
+    select when org_picostack_get_me_ribs no_morning_notification
+      id re#(.+)# setting(id)
+    schedule:remove(id)
+    fired {
+      clear ent:id if ent:id == id || ent:id{"id"} == id
     }
   }
 }
