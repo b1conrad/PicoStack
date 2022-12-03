@@ -8,6 +8,6 @@ ruleset teams.webhook.messaging {
       subject re#(Cannon Has .+)#
       description re#(.+)#
       setting(app,subj,desc)
-    http:post(webhook,json={"title":subj,"text":desc}) setting(response)
+    http:post(webhook,json={"title":subj,"text":desc})
   }
 }
