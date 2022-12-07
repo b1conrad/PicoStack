@@ -205,7 +205,6 @@ to look for favorite foods and if found send notification now.
   }
   rule checkEveryMorning {
     select when org_picostack_get_me_ribs it_is_morning
-             or notification eight_a_m
     pre {
       menu = time:now().get_lunch_menu()
       found_fav_food = menu.has_fav_food()
