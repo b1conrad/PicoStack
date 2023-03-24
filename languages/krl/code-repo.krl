@@ -14,16 +14,18 @@ ruleset code-repo {
     rs_event_domain = "code_repo"
     valid_rid = re#(^\w[\w\d-.]+)$#
     repo = function(){
+      form_url = <<#{meta:host}/sky/event/#{meta:eci}/none/code_repo/new_ruleset>>
       base_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/code.txt?rid=>>
       html:header("Repo")
       + <<<h1>Repo</h1>
+<h2>RIDs</h2>
 <ul>
 #{ent:code.map(function(v,k){
   <<<li>#{k} <a href="#{base_url+k}" target="_blank">raw</a></li>
 >>
 }).values().join("")}</ul>
 <h2>Update and edit</h2>
-<form action="#{meta:host}/sky/event/#{meta:eci}/none/code_repo/new_ruleset">
+<form action="#{form_url}" method="POST">
 <input name="rid" placeholder="rid"><br>
 <textarea name="krl" placeholder="krl"></textarea><br>
 <button type="submit">Submit</button>
