@@ -12,7 +12,7 @@ ruleset code-repo {
     }
     tags = ["code-repo"]
     rs_event_domain = "code_repo"
-    valid_rid = re#(^\w[\w\d-.]+)$#
+    valid_rid = re#(^\w[\w\d.-]+)$#
     repo = function(){
       form_url = <<#{meta:host}/sky/event/#{meta:eci}/none/code_repo/new_ruleset>>
       base_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/code.txt?rid=>>
@@ -36,7 +36,7 @@ ruleset code-repo {
   }
   rule stashCode {
     select when code_repo new_ruleset
-      rid re#(^\w[\w\d-.]+)$# setting(rid)
+      rid re#(^\w[\w\d.-]+)$# setting(rid)
     fired {
       ent:code{rid} := event:attrs{"krl"}
       raise code_repo event "code_stashed" attributes event:attrs
