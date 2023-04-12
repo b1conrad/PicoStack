@@ -106,11 +106,11 @@ To <input name="email">
     select when byname_notification status
       application re#(.+)#
       subject     re#(.+)#
-      description re#(.*)#
-      setting(app,subj,descr)
+      setting(app,subj)
       where ent:email && not ent:weekly_digest
     pre {
       subject = <<ByName: #{app}: #{subj}>>
+      descr = event:attrs{"description"}
     }
     email:send_text(ent:email,subject,descr) setting(response)
     fired {
