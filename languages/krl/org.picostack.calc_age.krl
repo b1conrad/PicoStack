@@ -37,7 +37,7 @@ ruleset org.picostack.calc_age {
     }
     ageCalc = function(birthYear){
       the_birth_year = birthYear.klog("year passed =")
-.as("Number")
+.split("").reduce(function(a,d){a*10+d.as("Number")},0)
 .klog("the_birth_year")
       diff = YEAR_NOW
 .klog("YEAR_NOW")
