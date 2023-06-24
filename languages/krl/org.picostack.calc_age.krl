@@ -36,10 +36,12 @@ ruleset org.picostack.calc_age {
       + html:footer()
     }
     ageCalc = function(birthYear){
-      printf = birthYear.klog("year passed =")
+      the_birth_year = birthYear.klog("year passed =")
+.as("Number")
+.klog("the_birth_year")
       diff = YEAR_NOW
 .klog("YEAR_NOW")
-- birthYear // was 2003 - birthYear
+- the_birth_year // was 2003 - birthYear
       diff
 .klog("diff")
     }
