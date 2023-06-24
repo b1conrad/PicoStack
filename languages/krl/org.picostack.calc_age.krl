@@ -6,7 +6,7 @@ ruleset org.picostack.calc_age {
     shares age_calc, url_test
   }
   global {
-    YEAR_NOW = 2023
+    YEAR_NOW = time:now().substr(0,4).split("").reduce(function(a,d){a*10+d.as("Number")},0)
     event_domain = "org_picostack_calc_age"
     age_calc = function(_headers){
       url_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{event_domain}>>
