@@ -8,7 +8,7 @@ ruleset org.picostack.calc_age {
   global {
     event_domain = "org_picostack_calc_age"
     age_calc = function(_headers){
-      url_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{event_domain}/>>
+      url_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{event_domain}>>
       url_calc = <<#{url_base}/new_inputs>>
       url_clear = <<#{url_base}/inputs_not_needed>>
       val_name = ent:name => << value="#{ent:name}">> | ""
