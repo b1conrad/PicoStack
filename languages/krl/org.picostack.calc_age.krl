@@ -16,10 +16,10 @@ ruleset org.picostack.calc_age {
 <h1>Manage age_calcs</h1>
 <form action="#{url}">
   Enter your name: 
-  <input name="name" maxlength="80" required#{ent:val_name}>
+  <input name="name" maxlength="80" required#{val_name}>
   <br>
   Enter the year of your birth.
-  <input name="year" type="number" maxlength="80" required#{ent:val_year}>
+  <input name="year" type="number" maxlength="80" required#{val_year}>
   <br>
   <button type="submit">Submit</button> // was Press any key to continue.
 </form>
