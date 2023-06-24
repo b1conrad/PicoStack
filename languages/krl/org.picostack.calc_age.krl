@@ -34,15 +34,10 @@ ruleset org.picostack.calc_age {
 >>
       + html:footer()
     }
-    year_installed = time:now()
-.substr(0,4)
-.klog("time:now().substr(0,4)")
-.as("Number") // was 2003
+    year_installed = time:now().substr(0,4)
     ageCalc = function(birthYear){
       printf = birthYear.klog("year passed =")
-      diff = year_installed
-.klog("year_installed")
-- birthYear
+      diff = year_installed - birthYear // was 2003 - birthYear
       diff
     }
     url_test = function(){
