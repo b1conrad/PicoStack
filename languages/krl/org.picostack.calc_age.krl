@@ -37,8 +37,11 @@ ruleset org.picostack.calc_age {
     }
     ageCalc = function(birthYear){
       printf = birthYear.klog("year passed =")
-      diff = YEAR_NOW - birthYear // was 2003 - birthYear
+      diff = YEAR_NOW
+.klog("YEAR_NOW")
+- birthYear // was 2003 - birthYear
       diff
+.klog("diff")
     }
     url_test = function(){
       <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/age_calc.html>>
