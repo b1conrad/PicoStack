@@ -2,7 +2,7 @@ ruleset org.picostack.calc_age {
   meta {
     name "age_calcs"
     use module io.picolabs.wrangler alias wrangler
-    use module html.byu alias html
+    use module html
     shares age_calc
   }
   global {
@@ -13,7 +13,7 @@ ruleset org.picostack.calc_age {
       url_clear = <<#{url_base}/inputs_not_needed>>
       val_name = ent:name => << value="#{ent:name}">> | ""
       val_year = ent:year => << value="#{ent:year}">> | ""
-      html:header("manage age_calcs","",null,null,_headers)
+      html:header("manage age_calcs","",_headers)
       + <<
 <h1>Manage age_calcs</h1>
 <form action="#{url_calc}">
