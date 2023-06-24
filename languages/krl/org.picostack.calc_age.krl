@@ -34,8 +34,8 @@ ruleset org.picostack.calc_age {
 >>
       + html:footer()
     }
-    year_installed = time:now().substr(0,4)
     ageCalc = function(birthYear){
+      year_installed = time:now().substr(0,4)
       printf = birthYear.klog("year passed =")
       diff = year_installed - birthYear // was 2003 - birthYear
       diff
