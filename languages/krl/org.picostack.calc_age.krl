@@ -3,7 +3,7 @@ ruleset org.picostack.calc_age {
     name "age_calcs"
     use module io.picolabs.wrangler alias wrangler
     use module html
-    shares age_calc
+    shares age_calc, url_test
   }
   global {
     event_domain = "org_picostack_calc_age"
@@ -39,6 +39,9 @@ ruleset org.picostack.calc_age {
       printf = birthYear.klog("year passed =")
       diff = year_installed - birthYear
       diff
+    }
+    url_test = function(){
+      <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/age_calc.html>>
     }
   }
   rule calculateAge {
