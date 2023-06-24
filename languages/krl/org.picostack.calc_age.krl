@@ -6,6 +6,7 @@ ruleset org.picostack.calc_age {
     shares age_calc, url_test
   }
   global {
+    YEAR_NOW = 2023
     event_domain = "org_picostack_calc_age"
     age_calc = function(_headers){
       url_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{event_domain}>>
@@ -35,9 +36,8 @@ ruleset org.picostack.calc_age {
       + html:footer()
     }
     ageCalc = function(birthYear){
-      year_installed = time:now().substr(0,4)
       printf = birthYear.klog("year passed =")
-      diff = year_installed - birthYear // was 2003 - birthYear
+      diff = YEAR_NOW - birthYear // was 2003 - birthYear
       diff
     }
     url_test = function(){
