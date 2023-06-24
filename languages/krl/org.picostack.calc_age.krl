@@ -9,13 +9,19 @@ ruleset org.picostack.calc_age {
     event_domain = "org_picostack_calc_age"
     age_calc = function(_headers){
       url = <<#{meta:host}/sky/event/#{meta:eci}/scanf/#{event_domain}/new_inputs>>
+      val_name = ent:name => << value="#{ent:name}">> | ""
+      val_year = ent:year => << value="#{ent:year}">> | ""
       html:header("manage age_calcs","",null,null,_headers)
       + <<
 <h1>Manage age_calcs</h1>
 <form action="#{url}">
-Enter your name: <input name="name" maxlength="80" required#{ent:name => << value="#{ent:name}">> | ""}><br>
-Enter the year of your birth.<input name="year" type="number" maxlength="80" required#{ent:year => << value="#{ent:year}">> | ""}><br>
-<button type="submit">Submit</button> // was Press any key to continue.
+  Enter your name: 
+  <input name="name" maxlength="80" required#{ent:val_name}>
+  <br>
+  Enter the year of your birth.
+  <input name="year" type="number" maxlength="80" required#{ent:val_year}>
+  <br>
+  <button type="submit">Submit</button> // was Press any key to continue.
 </form>
 #{ent:name && ent:age => <<
 <p>#{ent:name}, your age is #{ent:age}.</p>
