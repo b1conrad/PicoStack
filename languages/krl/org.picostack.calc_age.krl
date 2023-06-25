@@ -8,16 +8,22 @@ ruleset org.picostack.calc_age {
   global {
     YEAR_NOW = time:now().substr(0,4).split("").reduce(function(a,d){a*10+d.as("Number")},0)
     event_domain = "org_picostack_calc_age"
+    event_url = function(event_type){
+      <<#{meta:host}/sky/event/#{meta:eci}/none/#{event_domain}/#{event_type}>>
+    }
+    query_url = function(query_name){
+      <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/#{query_name}>>
+    }
+    url_test = function(){
+      query_url("age_calc.html")
+    }
     age_calc = function(_headers){
-      url_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{event_domain}>>
-      url_calc = <<#{url_base}/new_inputs>>
-      url_clear = <<#{url_base}/inputs_not_needed>>
       val_name = ent:name => << value="#{ent:name}">> | ""
       val_year = ent:year => << value="#{ent:year}">> | ""
       html:header("manage age_calcs","",_headers)
       + <<
 <h1>Manage age_calcs</h1>
-<form action="#{url_calc}">
+<form action="#{event_url("new_inputs")}">
   Enter your name: 
   <input name="name" maxlength="80" required#{val_name}>
   <br>
@@ -29,7 +35,7 @@ ruleset org.picostack.calc_age {
 #{ent:name && ent:age => <<
 <p>
 #{ent:name}, your age is #{ent:age}.
-<a href="#{url_clear}">clear</a>
+<a href="#{event_url("inputs_not_needed")}">clear</a>
 </p>
 >> | ""}
 >>
@@ -40,9 +46,6 @@ ruleset org.picostack.calc_age {
         .split("").reduce(function(a,d){a*10+d.as("Number")},0)
       diff = YEAR_NOW - the_birth_year // was 2003 - birthYear
       diff
-    }
-    url_test = function(){
-      <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/age_calc.html>>
     }
   }
   rule calculateAge {
