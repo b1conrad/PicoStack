@@ -1,0 +1,106 @@
+<!doctype html>
+<head>
+<title>Hello_World</title>
+<style type="text/css">
+span.yours {
+  background-color: silver;
+}
+span.subs {
+  background-color: orange;
+}
+span.chan {
+  background-color: yellow;
+}
+span.html {
+  background-color: skyblue;
+}
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td>
+<pre>
+ruleset <span class="subs">hello-world</span> {
+  meta {
+    name "<span class="subs">Hellos</span>"
+<span class="chan">    use module io.picolabs.wrangler alias wrangler</span>
+<span class="html">    use module html.byu alias html</span>
+    shares main_url, <span class="subs">Hello_World</span>
+  }
+  global {
+<span class="chan">    channel_tags = ["<span class="subs">Hellos</span>"]</span>
+    event_domain = "<span class="subs">hello_world</span>"
+    event_url = function(event_type,event_id){
+      eid = event_id || "none"
+      &lt;&lt;#{meta:host}/sky/event/#{meta:eci}/#{eid}/#{event_domain}/#{event_type}>>
+    }
+    query_url = function(query_name){
+      &lt;&lt;#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/#{query_name}>>
+    }
+    main_url = function(){
+      query_url("<span class="subs">Hello_World</span>.html")
+    }
+<span class="yours">    name = "Thom"</span>
+    <span class="subs">Hello_World</span> = function(_headers){
+<span class="html">      html:header("manage <span class="subs">Hellos</span>","",null,null,_headers)</span>
+<span class="html">      + &lt;&lt;</span>
+<span class="html">&lt;h1>Manage <span class="subs">Hellos</span>&lt;/h1></span>
+<span class="yours">Hello, &lt;i>#{ent:name || name || "world"}&lt;/i>!</span>
+<span class="yours"></span>
+<span class="yours">&lt;h2>Change Your Name!&lt;h2></span>
+<span class="yours">&lt;form action="#{event_url("new_name_submission")}"></span>
+<span class="yours">&lt;input name="new_name" /> &lt;button type="submit">Rechristen Me!&lt;/button></span>
+<span class="yours">&lt;/form></span>
+<span class="html">>></span>
+<span class="html">      + html:footer()</span>
+    }
+  }
+<span class="yours">  rule changeName {</span>
+<span class="yours">    select when hello_world new_name_submission</span>
+<span class="yours">    fired {</span>
+<span class="yours">      ent:name := event:attrs{"new_name"}</span>
+<span class="yours">    }</span>
+<span class="yours">  }</span>
+<span class="chan">  rule initialize {</span>
+<span class="chan">    select when wrangler ruleset_installed where event:attr("rids") >&lt; meta:rid</span>
+<span class="chan">    every {</span>
+<span class="chan">      wrangler:createChannel(</span>
+<span class="chan">        channel_tags,</span>
+<span class="chan">        {"allow":[{"domain":event_domain,"name":"*"}],"deny":[]},</span>
+<span class="chan">        {"allow":[{"rid":meta:rid,"name":"*"}],"deny":[]}</span>
+<span class="chan">      )</span>
+<span class="chan">    }</span>
+<span class="chan">    fired {</span>
+<span class="chan">      raise <span class="subs">hello_world</span> event "factory_reset"</span>
+<span class="chan">    }</span>
+<span class="chan">  }</span>
+<span class="chan">  rule keepChannelsClean {</span>
+<span class="chan">    select when <span class="subs">hello_world</span> factory_reset</span>
+<span class="chan">    foreach wrangler:channels(channel_tags).reverse().tail() setting(chan)</span>
+<span class="chan">    wrangler:deleteChannel(chan.get("id"))</span>
+<span class="chan">  }</span>
+}
+</pre>
+</td>
+<td valign="top">
+<h2>Explanations</h2>
+<p><span class="yours">your code</span> inserted into boilerplate</p>
+<p><span class="subs">your substitutions</span> in boilerplate</p>
+<dl>
+<dt>&nbsp;&nbsp;&nbsp;<span class="subs">hello-world</span></dt>
+<dd>the ruleset identifier (RID)</dd>
+<dt>&nbsp;&nbsp;&nbsp;<span class="subs">Hellos</span></dt>
+<dd>the ruleset name and channel tag</dd>
+<dt>&nbsp;&nbsp;&nbsp;<span class="subs">Hello_World</span></dt>
+<dd>the app name</dd>
+<dt>&nbsp;&nbsp;&nbsp;<span class="subs">hello_world</span></dt>
+<dd>the event domain</dd>
+</dl>
+<p><span class="chan">channel management</span></p>
+<p><span class="html">HTML generation</span></p>
+</td>
+</tr>
+</table>
+</body>
+</html>
