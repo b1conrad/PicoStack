@@ -78,14 +78,11 @@ ruleset <span class="subs">hello-world</span> {
   }
 <span class="yours">  rule changeName {</span>
 <span class="yours">    select when hello_world new_name_submission</span>
+<span class="back">    send_directive("_redirect",{"url":main_url()})</span>
 <span class="yours">    fired {</span>
 <span class="yours">      ent:name := event:attrs{"new_name"}</span>
 <span class="yours">    }</span>
 <span class="yours">  }</span>
-<span class="back">  rule redirectBackToMain {</span>
-<span class="back">    select when hello_world new_name_submission</span>
-<span class="back">    send_directive("_redirect",{"url":main_url()})</span>
-<span class="back">  }</span>
 <span class="chan">  rule initialize {</span>
 <span class="chan">    select when wrangler ruleset_installed where event:attr("rids") >&lt; meta:rid</span>
 <span class="chan">    every {</span>
@@ -124,7 +121,7 @@ ruleset <span class="subs">hello-world</span> {
 <p><span class="chan" onclick="toggle_it('chan')">channel management</span></p>
 <p><span class="html" onclick="toggle_it('html')">HTML generation</span></p>
 <p><span class="conv" onclick="toggle_it('conv')">convenience functions</span></p>
-<p><span class="back" onclick="toggle_it('back')">redirect to main</span> rule inserted into boilerplate</p>
+<p><span class="back" onclick="toggle_it('back')">redirect to main</span></p>
 </td>
 </tr>
 </table>
