@@ -14,6 +14,9 @@ span.chan {
 span.html {
   background-color: skyblue;
 }
+span.conv {
+  background-color: lightgreen;
+}
 span.norm {
   background-color: transparent;
 }
@@ -45,16 +48,16 @@ ruleset <span class="subs">hello-world</span> {
   global {
 <span class="chan">    channel_tags = ["<span class="subs">Hellos</span>"]</span>
     event_domain = "<span class="subs">hello_world</span>"
-    event_url = function(event_type,event_id){
-      eid = event_id || "none"
-      &lt;&lt;#{meta:host}/sky/event/#{meta:eci}/#{eid}/#{event_domain}/#{event_type}>>
-    }
-    query_url = function(query_name){
-      &lt;&lt;#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/#{query_name}>>
-    }
-    main_url = function(){
-      query_url("<span class="subs">Hello_World</span>.html")
-    }
+<span class="conv">    event_url = function(event_type,event_id){</span>
+<span class="conv">      eid = event_id || "none"</span>
+<span class="conv">      &lt;&lt;#{meta:host}/sky/event/#{meta:eci}/#{eid}/#{event_domain}/#{event_type}>></span>
+<span class="conv">    }</span>
+<span class="conv">    query_url = function(query_name){</span>
+<span class="conv">      &lt;&lt;#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/#{query_name}>></span>
+<span class="conv">    }</span>
+<span class="conv">    main_url = function(){</span>
+<span class="conv">      query_url("<span class="subs">Hello_World</span>.html")</span>
+<span class="conv">    }</span>
 <span class="yours">    name = "Thom"</span>
     <span class="subs">Hello_World</span> = function(_headers){
 <span class="html">      html:header("manage <span class="subs">Hellos</span>","",null,null,_headers)</span>
@@ -113,6 +116,7 @@ ruleset <span class="subs">hello-world</span> {
 </dl>
 <p><span class="chan" onclick="toggle_it('chan')">channel management</span></p>
 <p><span class="html" onclick="toggle_it('html')">HTML generation</span></p>
+<p><span class="conv" onclick="toggle_it('conv')">convenience functions</span></p>
 </td>
 </tr>
 </table>
