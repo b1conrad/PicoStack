@@ -59,7 +59,7 @@ ruleset <span class="subs">hello-world</span> {
 <span class="conv">      query_url("<span class="subs">Hello_World</span>.html")</span>
 <span class="conv">    }</span>
 <span class="yours">    name = "Thom"</span>
-    <span class="subs">Hello_World</span> = function(_headers){
+<span class="html">    <span class="subs">Hello_World</span> = function(_headers){</span>
 <span class="html">      html:header("manage <span class="subs">Hellos</span>","",null,null,_headers)</span>
 <span class="html">      + &lt;&lt;</span>
 <span class="html">&lt;h1>Manage <span class="subs">Hellos</span>&lt;/h1></span>
@@ -71,7 +71,7 @@ ruleset <span class="subs">hello-world</span> {
 <span class="yours">&lt;/form></span>
 <span class="html">>></span>
 <span class="html">      + html:footer()</span>
-    }
+<span class="html">    }</span>
   }
 <span class="yours">  rule changeName {</span>
 <span class="yours">    select when hello_world new_name_submission</span>
