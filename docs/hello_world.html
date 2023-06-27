@@ -14,13 +14,27 @@ span.chan {
 span.html {
   background-color: skyblue;
 }
+span.norm {
+  background-color: transparent;
+}
+p > span {
+  cursor: pointer;
+}
 </style>
+<script type="text/javascript">
+var toggle_it = function(class_name){
+  var elems = document.getElementById("the_code").getElementsByClassName(class_name);
+  for (let i=0; i<elems.length; ++i){
+    elems[i].classList.toggle("norm");
+  }
+}
+</script>
 </head>
 <body>
 <table>
 <tr>
 <td>
-<pre>
+<pre id="the_code">
 ruleset <span class="subs">hello-world</span> {
   meta {
     name "<span class="subs">Hellos</span>"
@@ -85,8 +99,8 @@ ruleset <span class="subs">hello-world</span> {
 </td>
 <td valign="top">
 <h2>Explanations</h2>
-<p><span class="yours">your code</span> inserted into boilerplate</p>
-<p><span class="subs">your substitutions</span> in boilerplate</p>
+<p><span class="yours" onclick="toggle_it('yours')">your code</span> inserted into boilerplate</p>
+<p><span class="subs" onclick="toggle_it('subs')">your substitutions</span> in boilerplate</p>
 <dl>
 <dt>&nbsp;&nbsp;&nbsp;<span class="subs">hello-world</span></dt>
 <dd>the ruleset identifier (RID)</dd>
@@ -97,8 +111,8 @@ ruleset <span class="subs">hello-world</span> {
 <dt>&nbsp;&nbsp;&nbsp;<span class="subs">hello_world</span></dt>
 <dd>the event domain</dd>
 </dl>
-<p><span class="chan">channel management</span></p>
-<p><span class="html">HTML generation</span></p>
+<p><span class="chan" onclick="toggle_it('chan')">channel management</span></p>
+<p><span class="html" onclick="toggle_it('html')">HTML generation</span></p>
 </td>
 </tr>
 </table>
