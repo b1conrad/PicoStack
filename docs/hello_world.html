@@ -78,7 +78,7 @@ ruleset <span class="subs">hello-world</span> {
   }
 <span class="yours">  rule changeName {</span>
 <span class="yours">    select when hello_world new_name_submission</span>
-<span class="back">    send_directive("_redirect",{"url":main_url()})</span>
+<span class="yours"><span class="back">    send_directive("_redirect",{"url":main_url()})</span></span>
 <span class="yours">    fired {</span>
 <span class="yours">      ent:name := event:attrs{"new_name"}</span>
 <span class="yours">    }</span>
