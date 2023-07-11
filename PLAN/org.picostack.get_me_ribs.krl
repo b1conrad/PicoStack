@@ -42,7 +42,7 @@ ruleset org.picostack.get_me_ribs {
 	  .no_ribs {color: red;}
 	</style>
 >>
-      nav_url = <<#{app:query_url(meta:eci,"ribs_on_menu.html")}?days_in_future=>>
+      nav_url = <<#{app:query_url(meta:rid,"ribs_on_menu.html")}?days_in_future=>>
       day_to_add = days_in_future.as("Number") || 0
       date_to_check = time:add(time:now(), {"days": day_to_add || 0})
       display_date = time:strftime(date_to_check , "%A, %d %b %Y")
