@@ -1,12 +1,11 @@
 ruleset org.picostack.get_me_ribs {
   meta {
     name "ribs_on_menus"
-    use module io.picolabs.wrangler alias wrangler
-    use module html.byu alias html
+    use module html.plan alias html
+    use module io.picolabs.plan.apps alias app
     shares ribs_on_menu, settings, id
   }
   global {
-    event_domain = "org_picostack_get_me_ribs"
     get_lunch_menu = function(dt){
       date_only = dt.split("T").head().split("-").join("")
       url = "https://dining-services-batch-495348054234.s3-us-west-2.amazonaws.com/dining/Cannon/" + date_only
@@ -43,7 +42,7 @@ ruleset org.picostack.get_me_ribs {
 	  .no_ribs {color: red;}
 	</style>
 >>
-      nav_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/ribs_on_menu.html?days_in_future=>>
+      nav_url = <<#{app:query_url(meta:eci,"ribs_on_menu.html")}?days_in_future=>>
       day_to_add = days_in_future.as("Number") || 0
       date_to_check = time:add(time:now(), {"days": day_to_add || 0})
       display_date = time:strftime(date_to_check , "%A, %d %b %Y")
@@ -53,8 +52,8 @@ ruleset org.picostack.get_me_ribs {
       real_food = function(mi) {mi{"header"} == false}
       summary = ok => found_fav_food.summary_text()
                     | "NO DATA"
-      html:header("manage ribs_on_menus",styles,null,null,_headers)
-      + <<
+      app:html_page("manage ribs_on_menus",styles,
+      <<
 <h1
   style="float:right;cursor:pointer"
   title="Settings"
@@ -80,7 +79,7 @@ ruleset org.picostack.get_me_ribs {
   }
 </div>
 >>
-      + html:footer()
+,_headers)
     }
     settings = function(_headers){
       styles = <<
@@ -95,21 +94,20 @@ td, th {
 }
 </style>
 >>
-      base_url = <<#{meta:host}/sky/event/#{meta:eci}>>
-      x_url = <<#{base_url}/experiment/#{event_domain}/new_wanted_item>>
-      test_url = <<#{base_url}/test/#{event_domain}/it_is_morning>>
-      del_url = <<#{base_url}/del/#{event_domain}/item_not_wanted>>
-      morning_url_on = <<#{base_url}/activate/#{event_domain}/morning_notification_wanted>>
-      morning_url_off = <<#{base_url}/deactivate/#{event_domain}/no_morning_notification>>
+      x_url = <<#{app:event_url(meta:rid,"new_wanted_item","experiment")}>>
+      test_url = <<#{app:event_url(meta:rid,"it_is_morning","test")}>>
+      del_url = <<#{app:event_url(meta:rid,"item_not_wanted","del")}>>
+      morning_url_on = <<#{app:event_url(meta:rid,"morning_notification_wanted","activate")}>>
+      morning_url_off = <<#{app:event_url(meta:rid,"deactivate","no_morning_notification")}>>
       is_morning_event = function(s){
-                           s{["event","domain"]} == event_domain &&
+                           s{["event","domain"]} == "org_picostack_get_me_ribs" &&
                            s{["event","name"]} == "it_is_morning"
                          }
       morning_event = schedule:list().filter(is_morning_event).head()
       toggle_url = morning_event => morning_url_off+"?id="+morning_event{"id"} | morning_url_on
       toggle_label = morning_event => "Turn off" | "Turn on"
-      html:header("settings for ribs_on_menus",styles,null,null,_headers)
-      + <<
+      app:html_page("settings for ribs_on_menus",styles,
+      <<
 <h1>Settings</h1>
 <h2>Favorite food items:</h2>
 <form action="#{x_url}">
@@ -150,29 +148,11 @@ td, th {
 to look for favorite foods and if found send notification now.
 </p>
 >>
-      + html:footer()
+,_headers)
     }
     id = function(){
       ent:id
     }
-  }
-  rule initialize {
-    select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
-    every {
-      wrangler:createChannel(
-        ["ribs_on_menus"],
-        {"allow":[{"domain":event_domain,"name":"*"}],"deny":[]},
-        {"allow":[{"rid":meta:rid,"name":"*"}],"deny":[]}
-      )
-    }
-    fired {
-      raise org_picostack_get_me_ribs event "factory_reset"
-    }
-  }
-  rule keepChannelsClean {
-    select when org_picostack_get_me_ribs factory_reset
-    foreach wrangler:channels(["ribs_on_menus"]).reverse().tail() setting(chan)
-    wrangler:deleteChannel(chan.get("id"))
   }
   rule initializeEntityVar {
     select when org_picostack_get_me_ribs factory_reset
@@ -224,7 +204,7 @@ to look for favorite foods and if found send notification now.
              or org_picostack_get_me_ribs morning_notification_wanted
              or org_picostack_get_me_ribs no_morning_notification
     pre {
-      main_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/settings.html>>
+      main_url = <<#{app:query_url(meta:rid,"settings.html")}>>
     }
     send_directive("_redirect",{"url":main_url})
   }
