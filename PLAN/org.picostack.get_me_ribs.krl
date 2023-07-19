@@ -1,7 +1,6 @@
 ruleset org.picostack.get_me_ribs {
   meta {
     name "ribs_on_menus"
-    use module html.plan alias html
     use module io.picolabs.plan.apps alias app
     shares ribs_on_menu, settings, id
   }
