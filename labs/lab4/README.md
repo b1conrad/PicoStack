@@ -4,6 +4,8 @@ This lab states that it doesn't matter "if you use Angular, some other framework
 The important thing is to learn how to use "the Sky Event and Sky Cloud APIs directly." 
 In other words, using picos as the "back end" of a web application, the data storage layer.
 
+Pico Stack uses picos for the "front end" as well, as shown in a ruleset in this folder.
+
 ## webapp.krl
 
 This is an example of a Pico Stack approach to building a web application on top of the rulesets written in lab 3.
