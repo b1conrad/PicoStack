@@ -98,6 +98,7 @@ td, th {
       base_url = <<#{meta:host}/sky/event/#{meta:eci}>>
       x_url = <<#{base_url}/experiment/#{event_domain}/new_wanted_item>>
       test_url = <<#{base_url}/test/#{event_domain}/it_is_morning>>
+      thu_url = <<#{base_url}/test/#{event_domain}/it_is_Thursday_morning>>
       del_url = <<#{base_url}/del/#{event_domain}/item_not_wanted>>
       morning_url_on = <<#{base_url}/activate/#{event_domain}/morning_notification_wanted>>
       morning_url_off = <<#{base_url}/deactivate/#{event_domain}/no_morning_notification>>
@@ -149,6 +150,10 @@ td, th {
 <button onclick="location='#{test_url}'">Test</button>
 to look for favorite foods and if found send notification now.
 </p>
+<p>
+<button onclick="location='#{thu_url}'">Test</button>
+to pretend it is Thursday.
+</p>
 >>
       + html:footer()
     }
@@ -176,6 +181,7 @@ to look for favorite foods and if found send notification now.
   }
   rule initializeEntityVar {
     select when org_picostack_get_me_ribs factory_reset
+    if ent:fav_foods.isnull() then noop()
     fired {
       ent:fav_foods := {"Ribs":{"name":"Ribs","regx":"rib"}}
     }
@@ -216,11 +222,36 @@ to look for favorite foods and if found send notification now.
 	"subject": "Cannon Has " + found_fav_food,
 	"description": "Found " + found_fav_food.lc() + " on the menu today!"
       }
+      raise org_picostack_get_me_ribs event "it_is_Thursday_morning"
+        if time:strftime(time:now(),"%a")=="Thu"
+    }
+  }
+  rule checkNextWeek {
+    select when org_picostack_get_me_ribs it_is_Thursday_morning
+    pre {
+      found_fav_food = 4.range(8)
+        .map(function(v){
+            date = time:add(time:now(),{"days":v})
+            menu = date.get_lunch_menu()
+            fav_food = menu.has_fav_food()
+            fav_food => time:strftime(date, "%A, %d %b %Y") + ": " + fav_food
+                      | null
+          })
+        .filter(function(s){s})
+    }
+    if found_fav_food.length() then noop()
+    fired {
+      raise byname_notification event "status" attributes {
+        "application": meta:rid,
+	"subject": "Cannon will have favorite foods next week",
+	"description": found_fav_food.join(";\n")
+      }
     }
   }
   rule redirectBack {
     select when org_picostack_get_me_ribs settings_changed
              or org_picostack_get_me_ribs it_is_morning
+             or org_picostack_get_me_ribs it_is_Thursday_morning
              or org_picostack_get_me_ribs morning_notification_wanted
              or org_picostack_get_me_ribs no_morning_notification
     pre {
