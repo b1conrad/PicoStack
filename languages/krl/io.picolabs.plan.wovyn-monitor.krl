@@ -24,7 +24,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
   }
   rule count {
     select when io_picolabs_plan_wovyn_sensors:temp_recorded
-      local_name re#(.+)# setting(local_name)
+      name re#(.+)# setting(local_name)
     fired {
       ent:counts{local_name} := ent:counts{local_name}.defaultsTo(0) + 1
     }
