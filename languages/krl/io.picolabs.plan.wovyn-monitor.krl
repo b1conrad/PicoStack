@@ -17,7 +17,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
     }
   }
   rule initialize {
-    select when io_picolabs_plan_wovyn_sensors factory_reset
+    select when io_picolabs_plan_wovyn_monitor factory_reset
     fired {
       ent:counts := {}
     }
