@@ -13,6 +13,9 @@ ruleset io.picolabs.plan.wovyn-monitor {
   <<#{k}: #{v}<br>
 >>
 }).values().join("")}
+<form action="#{app:event_url(meta:rid,"manual_reset")}">
+<button type="submit">reset</button>
+</form>
 >>, _headers)
     }
   }
@@ -28,5 +31,15 @@ ruleset io.picolabs.plan.wovyn-monitor {
     fired {
       ent:counts{local_name} := ent:counts{local_name}.defaultsTo(0) + 1
     }
+  }
+  rule resetCounts {
+    select when io_picolabs_plan_wovyn_monitor manual_reset
+    fired {
+      ent:counts := ent:counts.map(function(v,k){0})
+    }
+  }
+  rule redirectToHomePage {
+    select when io_picolabs_plan_wovyn_monitor manual_reset
+    send_directive("_redirect",{"url":app:query_url(meta:rid,"count.html")})
   }
 }
