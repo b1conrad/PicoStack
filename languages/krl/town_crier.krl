@@ -17,6 +17,8 @@ ruleset town_crier {
   <dt>Time currently</dt>
   <dd>#{time:now()}</dd>
 </dl>
+<h2>Technical</h2>
+<pre>#{schedule:list().encode()}</pre>
 >>, _headers)
     }
   }
@@ -34,5 +36,11 @@ ruleset town_crier {
     fired {
       ent:time_last_hour := time:now()
     }
+  }
+  rule cleanUpOldSchedules {
+    select when town_crier cleanup_needed
+    foreach schedule:list() setting(sched)
+    if sched{"id"} != ent:id then
+      schedule:remove(sched{"id"})
   }
 }
