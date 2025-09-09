@@ -27,6 +27,7 @@ ruleset town_crier {
   }
   rule start {
     select when town_crier factory_reset
+    if ent:id.isnull() then noop()
     fired {
       ent:time_installed := time:now()
       schedule time event "top_of_the_hour"
