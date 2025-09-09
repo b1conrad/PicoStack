@@ -29,7 +29,7 @@ ruleset town_crier {
       ent:time_installed := time:now()
       schedule time event "top_of_the_hour"
         repeat << 0 * * * * >>  attributes { } setting(id)
-      ent:id := id
+      ent:id := id.typeof()=="Map" => id{"id"} | id
     }
   }
   rule hearTheCry {
