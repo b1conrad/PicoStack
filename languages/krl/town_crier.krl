@@ -19,7 +19,9 @@ ruleset town_crier {
 </dl>
 <h2>Technical</h2>
 <p>ent:id = #{ent:id.encode()}</p>
-<pre>#{schedule:list().encode()}</pre>
+#{schedule:list().map(function(v){
+  <<<pre>#{v.encode()}</pre>
+>>}).join("")}
 >>, _headers)
     }
   }
