@@ -11,9 +11,9 @@ ruleset town_crier {
 <h1>Manage times</h1>
 <dl>
   <dt>Time installed</dt>
-  <dd>#{ent:time_installed}/dd>
+  <dd>#{ent:time_installed}</dd>
   <dt>Time last hour</dt>
-  <dd>#{ent:time_last_hour}/dd>
+  <dd>#{ent:time_last_hour}</dd>
   <dt>Time currently</dt>
   <dd>#{time:now()}</dd>
 </dl>
