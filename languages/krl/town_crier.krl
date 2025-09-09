@@ -6,7 +6,7 @@ ruleset town_crier {
   }
   global {
     time = function(_headers){
-      app:html_page("manage counts", "",
+      app:html_page("manage times", "",
 <<
 <h1>Manage times</h1>
 <dl>
