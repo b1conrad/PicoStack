@@ -18,6 +18,7 @@ ruleset town_crier {
   <dd>#{time:now()}</dd>
 </dl>
 <h2>Technical</h2>
+<p>ent:id = #{ent:id.encode()}</p>
 <pre>#{schedule:list().encode()}</pre>
 >>, _headers)
     }
