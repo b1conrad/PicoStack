@@ -41,10 +41,4 @@ ruleset town_crier {
       ent:time_last_hour := time:now()
     }
   }
-  rule cleanUpOldSchedules {
-    select when town_crier cleanup_needed
-    foreach schedule:list() setting(sched)
-    if sched{"id"} != ent:id then
-      schedule:remove(sched{"id"})
-  }
 }
