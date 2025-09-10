@@ -2,6 +2,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
   meta {
     name "counts"
     use module io.picolabs.plan.apps alias app
+    use module com.mailjet.sdk alias email
     shares count
   }
   global {
@@ -25,6 +26,13 @@ ruleset io.picolabs.plan.wovyn-monitor {
 <p>Last alert sent at: #{ent:last_alert_sent.defaultsTo("N/A")}</p>
 <p>Counts when alert sent:<br>
 #{display_counts(ent:last_alert_counts)}</p>
+<p>Last email response:</p>
+<pre>#{ent:last_response.defaultsTo("N/A").encode()}</pre>
+<h3>Email Setup</h3>
+<form action="#{app:event_url(meta:rid,"new_settings")}">
+To <input name="email" value="#{ent:email || ""}">
+<button type="submit">Save changes</button>
+</form>
 >>, _headers)
     }
   }
@@ -62,14 +70,37 @@ ruleset io.picolabs.plan.wovyn-monitor {
   }
   rule redirectToHomePage {
     select when io_picolabs_plan_wovyn_monitor manual_reset
+             or io_picolabs_plan_wovyn_monitor new_settings
     send_directive("_redirect",{"url":app:query_url(meta:rid,"count.html")})
   }
-  rule notifyFailedCheck {
+  rule recordFailedCheck {
     select when io_picolabs_plan_wovyn_monitor check_failed
     fired {
       ent:checks_failed := ent:checks_failed.defaultsTo(0) + 1
       ent:last_alert_counts := event:attrs{"counts"}
       ent:last_alert_sent := time:now()
+    }
+  }
+  rule notifyFailedCheck {
+    select when io_picolabs_plan_wovyn_monitor check_failed
+    pre {
+      subject = <<Alert: #{meta:rid}: #{ent:last_alert_sent}>>
+      body = <<At least one sensor has not reported in over an hour:
+        #{display_counts(ent:last_alert_counts)}
+>>
+    }
+    if ent:email then
+      email:send_text(ent:email,subject,body) setting(response)
+    fired {
+      ent:last_response := response
+    }
+  }
+  rule saveSettings {
+    select when io_picolabs_plan_wovyn_monitor new_settings
+      email re#(.+@.+)# setting(to)
+    if ent:email != to then noop()
+    fired {
+      ent:email := to
     }
   }
 }
