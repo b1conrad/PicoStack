@@ -92,8 +92,6 @@ To <input name="email" value="#{ent:email.defaultsTo("")}">
     email:send_text(ent:email,subject,body) setting(response)
     fired {
       ent:last_response := response
-    } else {
-      clear ent:last_response
     }
   }
   rule saveSettings {
@@ -108,6 +106,7 @@ To <input name="email" value="#{ent:email.defaultsTo("")}">
       email re#^ *$#
     fired {
       clear ent:email
+      clear ent:last_response
     }
   }
 }
