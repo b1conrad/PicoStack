@@ -30,7 +30,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
 <pre>#{ent:last_response.defaultsTo("N/A").encode()}</pre>
 <h3>Email Setup</h3>
 <form action="#{app:event_url(meta:rid,"new_settings")}">
-To <input name="email" value="#{ent:email || ""}">
+To <input name="email" value="#{ent:email.defaultsTo("")}">
 <button type="submit">Save changes</button>
 </form>
 >>, _headers)
@@ -83,24 +83,31 @@ To <input name="email" value="#{ent:email || ""}">
   }
   rule notifyFailedCheck {
     select when io_picolabs_plan_wovyn_monitor check_failed
+      where not ent:email.isnull()
     pre {
       subject = <<Alert: #{meta:rid}: #{ent:last_alert_sent}>>
       body = <<At least one sensor has not reported in over an hour:
-        #{display_counts(ent:last_alert_counts)}
->>
+#{display_counts(ent:last_alert_counts).replace(re#<br>#g,"")}>>
     }
-    if ent:email then
-      email:send_text(ent:email,subject,body) setting(response)
+    email:send_text(ent:email,subject,body) setting(response)
     fired {
       ent:last_response := response
+    } else {
+      clear ent:last_response
     }
   }
   rule saveSettings {
     select when io_picolabs_plan_wovyn_monitor new_settings
       email re#(.+@.+)# setting(to)
-    if ent:email != to then noop()
     fired {
       ent:email := to
+    }
+  }
+  rule removeEmailAddress {
+    select when io_picolabs_plan_wovyn_monitor new_settings
+      email re#^ *$#
+    fired {
+      clear ent:email
     }
   }
 }
