@@ -5,14 +5,17 @@ ruleset io.picolabs.plan.wovyn-monitor {
     shares count
   }
   global {
+    display_counts = function(cs){
+      cs.map(function(v,k){
+        <<#{k}: #{v}<br>
+>>
+      }).values().join("")
+    }
     count = function(_headers){
       app:html_page("manage counts", "",
 <<
 <h1>Manage counts</h1>
-#{ent:counts.map(function(v,k){
-  <<#{k}: #{v}<br>
->>
-}).values().join("")}
+#{display_counts(ent:counts)}
 <form action="#{app:event_url(meta:rid,"manual_reset")}">
 <button type="submit">reset</button>
 </form>
@@ -21,10 +24,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
 <p>How many checks failed? #{ent:checks_failed.defaultsTo(0)}</p>
 <p>Last alert sent at: #{ent:last_alert_sent.defaultsTo("N/A")}</p>
 <p>Counts when alert sent:<br>
-#{ent:last_alert_counts.defaultsTo({}).map(function(v,k){
-  <<#{k}: #{v}<br>
->>
-}).values().join("")}</p>
+#{display_counts(ent:last_alert_counts)}</p>
 >>, _headers)
     }
   }
