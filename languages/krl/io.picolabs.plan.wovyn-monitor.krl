@@ -30,6 +30,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
   }
   rule initialize {
     select when io_picolabs_plan_wovyn_monitor factory_reset
+    if ent:counts.isnull() then noop()
     fired {
       ent:counts := {}
     }
