@@ -18,7 +18,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
 </form>
 <p>How many checks ok? #{ent:checks_ok.defaultsTo(0)}</p>
 <p>Last check ok at: #{ent:last_check_ok_at.defaultsTo("N/A")}</p>
-<p>How many checks failed?#{ent:checks_failed.defaultsTo(0)}</p>
+<p>How many checks failed? #{ent:checks_failed.defaultsTo(0)}</p>
 <p>Last alert sent at: #{ent:last_alert_sent.defaultsTo("N/A")}</p>
 <p>Counts when alert sent:<br>
 #{ent:last_alert_counts.defaultsTo({}).map(function(v,k){
