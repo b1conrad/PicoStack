@@ -18,7 +18,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
 <h1>Manage counts</h1>
 #{display_counts(ent:counts)}
 <form action="#{app:event_url(meta:rid,"manual_reset")}">
-<button type="submit">reset</button>
+<button type="submit" style="cursor:pointer">reset</button>
 </form>
 <p>How many checks ok? #{ent:checks_ok.defaultsTo(0)}</p>
 <p>Last check ok at: #{ent:last_check_ok_at.defaultsTo("N/A")}</p>
@@ -31,7 +31,7 @@ ruleset io.picolabs.plan.wovyn-monitor {
 <h3>Email Setup</h3>
 <form action="#{app:event_url(meta:rid,"new_settings")}">
 To <input name="email" value="#{ent:email.defaultsTo("")}">
-<button type="submit">Save changes</button>
+<button type="submit" style="cursor:pointer">Save changes</button>
 </form>
 >>, _headers)
     }
